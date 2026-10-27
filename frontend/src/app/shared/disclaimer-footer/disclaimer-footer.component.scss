@@ -1,0 +1,36 @@
+.disclaimer-footer {
+  margin-top: 48px;
+  padding: 16px 20px;
+  background-color: #f1f5f9;
+  border-top: 1px solid #e2e8f0;
+  border-radius: 8px;
+
+  .disclaimer-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .disclaimer-icon {
+    color: #64748b;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  .disclaimer-text {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #475569;
+    line-height: 1.4;
+
+    strong {
+      color: #334155;
+    }
+  }
+}

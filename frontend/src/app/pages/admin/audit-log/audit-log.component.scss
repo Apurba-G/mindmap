@@ -1,0 +1,88 @@
+.audit-container {
+  padding-top: 32px;
+  padding-bottom: 32px;
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+
+    button {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+  }
+
+  .audit-card {
+    padding: 20px;
+    position: relative;
+
+    .loading-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    .audit-table {
+      width: 100%;
+
+      th {
+        font-weight: 600;
+        color: #475569;
+        font-size: 0.85rem;
+      }
+
+      .timestamp-cell {
+        font-family: 'Roboto Mono', monospace;
+        font-size: 0.82rem;
+        color: #475569;
+      }
+
+      .handle-pill {
+        font-family: 'Roboto Mono', monospace;
+        font-size: 0.85rem;
+        color: #3f51b5;
+        font-weight: 600;
+      }
+
+      .target-cell {
+        font-family: 'Roboto Mono', monospace;
+        font-size: 0.85rem;
+        color: #64748b;
+      }
+
+      .ip-code {
+        font-family: 'Roboto Mono', monospace;
+        font-size: 0.82rem;
+        color: #0f172a;
+      }
+
+      .details-cell {
+        font-size: 0.88rem;
+        color: #334155;
+      }
+
+      .empty-table {
+        text-align: center;
+        padding: 32px;
+        color: #64748b;
+        font-style: italic;
+      }
+    }
+  }
+}

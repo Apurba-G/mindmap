@@ -1,0 +1,223 @@
+<div class="container dashboard-container">
+  <!-- Loading spinner -->
+  <div class="loading-state" *ngIf="isLoading">
+    <mat-spinner diameter="48"></mat-spinner>
+    <p>Loading your dashboard...</p>
+  </div>
+
+  <div *ngIf="!isLoading">
+    <!-- Welcome Header -->
+    <div class="welcome-header">
+      <div class="welcome-text">
+        <h1 class="welcome-title">Welcome, {{ currentUser?.displayName || 'User' }}</h1>
+        <p class="welcome-handle">User ID: &#64;{{ currentUser?.userId }}</p>
+      </div>
+      <div class="header-badges">
+        <span class="badge badge-info">3-Level Assessment System</span>
+      </div>
+    </div>
+
+    <!-- Gentle Profile Summary Card if Available -->
+    <div class="summary-banner mindmap-card" *ngIf="profileSummary && profileSummary.summaryText">
+      <div class="summary-badge">
+        <mat-icon>insights</mat-icon>
+        <span>Your Profile Insights</span>
+      </div>
+      <p class="summary-body">{{ profileSummary.summaryText }}</p>
+      <div class="summary-footer">
+        <button mat-button color="primary" (click)="viewProfile()">
+          View Full Summary <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <h2 class="section-title">Assessment Progression</h2>
+
+    <!-- Assessment Cards Grid -->
+    <div class="cards-grid">
+      <!-- Level 1 Card -->
+      <mat-card class="assessment-card mindmap-card" [ngClass]="{'card-completed': levelStatus.level1Status === 'COMPLETED'}">
+        <div class="card-badge-row">
+          <span class="level-indicator">Level 1</span>
+          <span class="badge badge-success" *ngIf="levelStatus.level1Status === 'COMPLETED'">
+            <mat-icon>check</mat-icon> Completed
+          </span>
+          <span class="badge badge-warning" *ngIf="levelStatus.level1Status === 'IN_PROGRESS'">
+            In Progress
+          </span>
+          <span class="badge badge-neutral" *ngIf="levelStatus.level1Status === 'NOT_STARTED'">
+            Ready
+          </span>
+        </div>
+
+        <mat-card-header>
+          <mat-card-title>Big Five Personality Traits</mat-card-title>
+          <mat-card-subtitle>Foundational psychometric evaluation (50 Questions)</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content class="card-desc">
+          <p>
+            Measures baseline Openness, Conscientiousness, Extraversion, Agreeableness, and Emotional Stability 
+            with calibrated normative baselines.
+          </p>
+        </mat-card-content>
+
+        <mat-card-actions class="card-actions">
+          <button
+            mat-flat-button
+            color="primary"
+            *ngIf="levelStatus.level1Status === 'NOT_STARTED'"
+            (click)="startOrResumeAssessment(1)">
+            Start Level 1
+          </button>
+          <button
+            mat-flat-button
+            color="accent"
+            *ngIf="levelStatus.level1Status === 'IN_PROGRESS'"
+            (click)="startOrResumeAssessment(1)">
+            Resume Level 1
+          </button>
+          <button
+            mat-stroked-button
+            *ngIf="levelStatus.level1Status === 'COMPLETED'"
+            (click)="startOrResumeAssessment(1)">
+            Review Level 1
+          </button>
+        </mat-card-actions>
+      </mat-card>
+
+      <!-- Level 2 Card -->
+      <mat-card
+        class="assessment-card mindmap-card"
+        [ngClass]="{
+          'card-locked': levelStatus.level2Status === 'LOCKED',
+          'card-completed': levelStatus.level2Status === 'COMPLETED'
+        }">
+        <div class="card-badge-row">
+          <span class="level-indicator">Level 2</span>
+          <span class="badge badge-success" *ngIf="levelStatus.level2Status === 'COMPLETED'">
+            <mat-icon>check</mat-icon> Completed
+          </span>
+          <span class="badge badge-warning" *ngIf="levelStatus.level2Status === 'IN_PROGRESS'">
+            In Progress
+          </span>
+          <span class="badge badge-neutral" *ngIf="levelStatus.level2Status === 'NOT_STARTED'">
+            Unlocked
+          </span>
+          <span class="badge badge-danger" *ngIf="levelStatus.level2Status === 'LOCKED'">
+            <mat-icon>lock</mat-icon> Locked
+          </span>
+        </div>
+
+        <mat-card-header>
+          <mat-card-title>Cognitive Stress &amp; Complex Scenarios</mat-card-title>
+          <mat-card-subtitle>Dilemmas, time pressure, &amp; dark traits (30 Questions)</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content class="card-desc">
+          <p>
+            Evaluates behavioral consistency under cognitive ambiguity, moral decision-making, 
+            and stress tolerance in structured dilemma scenarios.
+          </p>
+        </mat-card-content>
+
+        <mat-card-actions class="card-actions">
+          <button
+            mat-flat-button
+            color="primary"
+            *ngIf="levelStatus.level2Status === 'NOT_STARTED'"
+            (click)="startOrResumeAssessment(2)">
+            Start Level 2
+          </button>
+          <button
+            mat-flat-button
+            color="accent"
+            *ngIf="levelStatus.level2Status === 'IN_PROGRESS'"
+            (click)="startOrResumeAssessment(2)">
+            Resume Level 2
+          </button>
+          <button
+            mat-stroked-button
+            *ngIf="levelStatus.level2Status === 'COMPLETED'"
+            (click)="startOrResumeAssessment(2)">
+            Review Level 2
+          </button>
+          <button
+            mat-button
+            disabled
+            *ngIf="levelStatus.level2Status === 'LOCKED'">
+            Requires Level 1 Completion
+          </button>
+        </mat-card-actions>
+      </mat-card>
+
+      <!-- Level 3 Card -->
+      <mat-card
+        class="assessment-card mindmap-card"
+        [ngClass]="{
+          'card-locked': levelStatus.level3Status === 'LOCKED',
+          'card-completed': levelStatus.level3Status === 'COMPLETED'
+        }">
+        <div class="card-badge-row">
+          <span class="level-indicator">Level 3</span>
+          <span class="badge badge-success" *ngIf="levelStatus.level3Status === 'COMPLETED'">
+            <mat-icon>check</mat-icon> Completed
+          </span>
+          <span class="badge badge-warning" *ngIf="levelStatus.level3Status === 'IN_PROGRESS'">
+            In Progress
+          </span>
+          <span class="badge badge-neutral" *ngIf="levelStatus.level3Status === 'NOT_STARTED'">
+            Unlocked
+          </span>
+          <span class="badge badge-danger" *ngIf="levelStatus.level3Status === 'LOCKED'">
+            <mat-icon>lock</mat-icon> Locked
+          </span>
+        </div>
+
+        <mat-card-header>
+          <mat-card-title>Comprehensive Temperament Synthesis</mat-card-title>
+          <mat-card-subtitle>Archetype synthesis &amp; holistic profiling (20 Questions)</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content class="card-desc">
+          <p>
+            Synthesizes responses across all tiers to identify constitutional temperaments, 
+            interaction dynamics, and psychological adaptability.
+          </p>
+        </mat-card-content>
+
+        <mat-card-actions class="card-actions">
+          <button
+            mat-flat-button
+            color="primary"
+            *ngIf="levelStatus.level3Status === 'NOT_STARTED'"
+            (click)="startOrResumeAssessment(3)">
+            Start Level 3
+          </button>
+          <button
+            mat-flat-button
+            color="accent"
+            *ngIf="levelStatus.level3Status === 'IN_PROGRESS'"
+            (click)="startOrResumeAssessment(3)">
+            Resume Level 3
+          </button>
+          <button
+            mat-stroked-button
+            *ngIf="levelStatus.level3Status === 'COMPLETED'"
+            (click)="startOrResumeAssessment(3)">
+            Review Level 3
+          </button>
+          <button
+            mat-button
+            disabled
+            *ngIf="levelStatus.level3Status === 'LOCKED'">
+            Requires Level 2 Completion
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+
+    <!-- Disclaimer footer -->
+    <app-disclaimer-footer></app-disclaimer-footer>
+  </div>
+</div>

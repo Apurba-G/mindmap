@@ -1,0 +1,87 @@
+<div class="container audit-container">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Administrative Audit &amp; Compliance Log</h1>
+      <p class="page-subtitle">Immutable chronological ledger of administrative access, scoring adjustments, and profile inspections.</p>
+    </div>
+    <button mat-stroked-button routerLink="/admin">
+      <mat-icon>arrow_back</mat-icon> Back to Dashboard
+    </button>
+  </div>
+
+  <mat-card class="audit-card mindmap-card">
+    <div class="loading-overlay" *ngIf="isLoading">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <div class="table-responsive">
+      <table mat-table [dataSource]="dataSource" class="audit-table">
+        <!-- Timestamp -->
+        <ng-container matColumnDef="timestamp">
+          <th mat-header-cell *matHeaderCellDef>Timestamp</th>
+          <td mat-cell *matCellDef="let log">
+            <span class="timestamp-cell">{{ log.timestamp | date: 'yyyy-MM-dd HH:mm:ss' }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Admin Handle -->
+        <ng-container matColumnDef="adminHandle">
+          <th mat-header-cell *matHeaderCellDef>Admin User</th>
+          <td mat-cell *matCellDef="let log">
+            <span class="handle-pill">&#64;{{ log.adminHandle }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Target User -->
+        <ng-container matColumnDef="targetUser">
+          <th mat-header-cell *matHeaderCellDef>Target Subject</th>
+          <td mat-cell *matCellDef="let log">
+            <span class="target-cell">&#64;{{ log.targetUser }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Action -->
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>Action</th>
+          <td mat-cell *matCellDef="let log">
+            <span class="badge badge-info">{{ log.action }}</span>
+          </td>
+        </ng-container>
+
+        <!-- IP Address -->
+        <ng-container matColumnDef="ipAddress">
+          <th mat-header-cell *matHeaderCellDef>IP Address</th>
+          <td mat-cell *matCellDef="let log">
+            <span class="ip-code">{{ log.ipAddress }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Details -->
+        <ng-container matColumnDef="details">
+          <th mat-header-cell *matHeaderCellDef>Details</th>
+          <td mat-cell *matCellDef="let log">
+            <span class="details-cell">{{ log.details || '—' }}</span>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+        <!-- No data row -->
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell empty-table" colspan="6">
+            No audit records found.
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <mat-paginator
+      [length]="totalElements"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="[10, 15, 25, 50]"
+      (page)="onPageChange($event)"
+      showFirstLastButtons>
+    </mat-paginator>
+  </mat-card>
+</div>

@@ -1,0 +1,123 @@
+.user-list-container {
+  padding-top: 32px;
+  padding-bottom: 32px;
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+
+    button {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+  }
+
+  .table-card {
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+
+    .search-bar {
+      margin-bottom: 16px;
+
+      .search-field {
+        width: 100%;
+        max-width: 400px;
+      }
+    }
+
+    .loading-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    .users-table {
+      width: 100%;
+
+      th {
+        font-weight: 600;
+        color: #475569;
+        font-size: 0.85rem;
+      }
+
+      .clickable-row {
+        cursor: pointer;
+        transition: background-color 0.15s ease;
+
+        &:hover {
+          background-color: #f8fafc;
+        }
+      }
+
+      .user-handle-cell {
+        font-family: 'Roboto Mono', monospace;
+        font-weight: 600;
+        color: #3f51b5;
+        font-size: 0.9rem;
+      }
+
+      .user-name-cell {
+        font-weight: 500;
+        color: #0f172a;
+      }
+
+      .level-badges-row {
+        display: flex;
+        gap: 6px;
+
+        .lvl-badge {
+          font-size: 0.75rem;
+          font-weight: 600;
+          padding: 2px 6px;
+          border-radius: 4px;
+
+          &.lvl-completed {
+            background-color: #dcfce7;
+            color: #166534;
+          }
+          &.lvl-in_progress {
+            background-color: #fef9c3;
+            color: #854d0e;
+          }
+          &.lvl-not_started {
+            background-color: #f1f5f9;
+            color: #475569;
+          }
+          &.lvl-locked {
+            background-color: #f3f4f6;
+            color: #9ca3af;
+          }
+        }
+      }
+
+      .table-actions-cell {
+        display: flex;
+        align-items: center;
+      }
+
+      .empty-table {
+        text-align: center;
+        padding: 32px;
+        color: #64748b;
+        font-style: italic;
+      }
+    }
+  }
+}

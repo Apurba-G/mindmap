@@ -1,0 +1,235 @@
+.assessment-container {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 32px 16px;
+
+  .loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 380px;
+    gap: 16px;
+    color: #64748b;
+  }
+
+  .top-progress-wrapper {
+    margin-bottom: 24px;
+
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+
+      .level-tag {
+        font-weight: 700;
+        font-size: 0.85rem;
+        color: #3b82f6;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .question-counter {
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: #1e293b;
+      }
+
+      .percent-label {
+        font-size: 0.85rem;
+        color: #64748b;
+      }
+    }
+
+    .assessment-progress {
+      height: 8px;
+      border-radius: 4px;
+    }
+  }
+
+  .question-card {
+    padding: 32px 28px;
+    border-radius: 16px;
+
+    .card-header-bar {
+      display: flex;
+      align-items: center;
+      margin-bottom: 16px;
+
+      .part-badge {
+        background: #f1f5f9;
+        color: #475569;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+
+      .timer-badge {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: #fef2f2;
+        color: #dc2626;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 700;
+
+        .timer-icon {
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+        }
+
+        .timer-text {
+          min-width: 28px;
+        }
+      }
+    }
+
+    .scenario-block {
+      background-color: #f8fafc;
+      border-left: 4px solid #3b82f6;
+      border-radius: 4px;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      display: flex;
+      gap: 8px;
+
+      .quote-icon {
+        color: #94a3b8;
+        font-size: 24px;
+        flex-shrink: 0;
+      }
+
+      .scenario-text {
+        font-style: italic;
+        color: #334155;
+        font-size: 0.98rem;
+        line-height: 1.6;
+        margin: 0;
+      }
+    }
+
+    .question-title {
+      font-size: 1.28rem;
+      font-weight: 600;
+      color: #0f172a;
+      line-height: 1.45;
+      margin: 0 0 24px 0;
+    }
+
+    .options-wrapper {
+      margin-bottom: 28px;
+
+      .options-radio-group {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .option-radio-item {
+        background: #ffffff;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 14px 16px;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+
+        &:hover {
+          background-color: #f8fafc;
+          border-color: #cbd5e1;
+        }
+
+        &.mat-mdc-radio-checked {
+          border-color: #3f51b5;
+          background-color: #eef2ff;
+        }
+
+        .option-text {
+          font-size: 0.98rem;
+          color: #1e293b;
+          line-height: 1.4;
+        }
+      }
+    }
+
+    .question-actions {
+      display: flex;
+      align-items: center;
+      padding-top: 16px;
+      border-top: 1px solid #f1f5f9;
+
+      .next-btn {
+        height: 44px;
+        padding: 0 24px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .spinner-btn {
+        margin-right: 6px;
+      }
+    }
+  }
+
+  .completed-state {
+    padding: 32px 0;
+
+    .completed-card {
+      text-align: center;
+      padding: 48px 32px;
+      border-radius: 16px;
+
+      .completed-icon-badge {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background-color: #dcfce7;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 16px;
+
+        mat-icon {
+          color: #16a34a;
+          font-size: 48px;
+          width: 48px;
+          height: 48px;
+        }
+      }
+
+      .completed-title {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: #0f172a;
+        margin: 0 0 12px 0;
+      }
+
+      .completed-desc {
+        font-size: 1rem;
+        color: #475569;
+        max-width: 520px;
+        margin: 0 auto 32px auto;
+        line-height: 1.6;
+      }
+
+      .completed-actions {
+        display: flex;
+        justify-content: center;
+
+        button {
+          height: 44px;
+          padding: 0 28px;
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+        }
+      }
+    }
+  }
+}

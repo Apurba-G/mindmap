@@ -1,0 +1,107 @@
+<div class="container profile-container">
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="isLoading">
+    <mat-spinner diameter="44"></mat-spinner>
+    <p>Loading your profile...</p>
+  </div>
+
+  <div *ngIf="!isLoading">
+    <!-- User Info Header -->
+    <div class="profile-header-card mindmap-card">
+      <div class="avatar-circle">
+        <mat-icon>person</mat-icon>
+      </div>
+      <div class="user-details">
+        <h1 class="user-name">{{ currentUser?.displayName }}</h1>
+        <p class="user-handle">&#64;{{ currentUser?.userId }}</p>
+      </div>
+      <div class="flex-spacer"></div>
+      <div class="profile-actions">
+        <button mat-stroked-button (click)="exportData()" [disabled]="isExporting">
+          <mat-spinner *ngIf="isExporting" diameter="16" class="btn-spinner"></mat-spinner>
+          <mat-icon *ngIf="!isExporting">file_download</mat-icon>
+          <span>Export My Data</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Assessment Progression Card -->
+    <mat-card class="status-card mindmap-card">
+      <h2 class="card-section-title">Assessment Progression Status</h2>
+      <div class="levels-status-grid">
+        <!-- Level 1 -->
+        <div class="level-status-box">
+          <div class="level-meta">
+            <span class="lvl-title">Level 1: Big Five</span>
+            <span class="badge badge-success" *ngIf="levelStatus.level1Status === 'COMPLETED'">Completed ✓</span>
+            <span class="badge badge-warning" *ngIf="levelStatus.level1Status === 'IN_PROGRESS'">In Progress</span>
+            <span class="badge badge-neutral" *ngIf="levelStatus.level1Status === 'NOT_STARTED'">Not Started</span>
+          </div>
+          <p class="lvl-desc">Foundational five-factor personality model.</p>
+        </div>
+
+        <!-- Level 2 -->
+        <div class="level-status-box">
+          <div class="level-meta">
+            <span class="lvl-title">Level 2: Cognitive Stress</span>
+            <span class="badge badge-success" *ngIf="levelStatus.level2Status === 'COMPLETED'">Completed ✓</span>
+            <span class="badge badge-warning" *ngIf="levelStatus.level2Status === 'IN_PROGRESS'">In Progress</span>
+            <span class="badge badge-neutral" *ngIf="levelStatus.level2Status === 'NOT_STARTED'">Unlocked</span>
+            <span class="badge badge-danger" *ngIf="levelStatus.level2Status === 'LOCKED'">Locked 🔒</span>
+          </div>
+          <p class="lvl-desc">Stress tolerance, dilemma decision-making, and dark trait processing.</p>
+        </div>
+
+        <!-- Level 3 -->
+        <div class="level-status-box">
+          <div class="level-meta">
+            <span class="lvl-title">Level 3: Temperament</span>
+            <span class="badge badge-success" *ngIf="levelStatus.level3Status === 'COMPLETED'">Completed ✓</span>
+            <span class="badge badge-warning" *ngIf="levelStatus.level3Status === 'IN_PROGRESS'">In Progress</span>
+            <span class="badge badge-neutral" *ngIf="levelStatus.level3Status === 'NOT_STARTED'">Unlocked</span>
+            <span class="badge badge-danger" *ngIf="levelStatus.level3Status === 'LOCKED'">Locked 🔒</span>
+          </div>
+          <p class="lvl-desc">Holistic synthesis across behavioral modalities.</p>
+        </div>
+      </div>
+    </mat-card>
+
+    <!-- Gentle Narrative Summary -->
+    <mat-card class="narrative-card mindmap-card" *ngIf="profileSummary && profileSummary.visibility !== 'NONE'">
+      <div class="narrative-header">
+        <mat-icon class="narrative-icon">psychology</mat-icon>
+        <h2 class="card-section-title">Personal Self-Awareness Narrative</h2>
+      </div>
+
+      <div class="narrative-content">
+        <p class="narrative-text">
+          {{ profileSummary.summaryText || 'Your responses show a balanced approach to interpersonal communication and thoughtful consideration under varying circumstances.' }}
+        </p>
+
+        <div class="privacy-note">
+          <mat-icon>verified_user</mat-icon>
+          <span>
+            To preserve psychological safety and prevent cognitive bias, specific clinical trait scores and temperament taxonomies are reserved for administrative review.
+          </span>
+        </div>
+      </div>
+    </mat-card>
+
+    <!-- Account Privacy and Data Controls -->
+    <mat-card class="danger-zone-card mindmap-card">
+      <h2 class="card-section-title danger-title">Data Privacy &amp; Account Management</h2>
+      <p class="danger-desc">
+        Under our strict data governance policy, you have the right to permanently erase your profile and response history.
+      </p>
+      <div class="danger-actions">
+        <button mat-flat-button color="warn" (click)="confirmDeleteAccount()" [disabled]="isDeleting">
+          <mat-spinner *ngIf="isDeleting" diameter="18" class="btn-spinner"></mat-spinner>
+          <mat-icon *ngIf="!isDeleting">delete_outline</mat-icon>
+          <span>Delete My Account</span>
+        </button>
+      </div>
+    </mat-card>
+
+    <app-disclaimer-footer></app-disclaimer-footer>
+  </div>
+</div>

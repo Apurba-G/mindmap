@@ -1,0 +1,200 @@
+<div class="container viewer-container">
+  <!-- Breadcrumb & Back -->
+  <div class="header-nav">
+    <button mat-button routerLink="/admin/users">
+      <mat-icon>arrow_back</mat-icon> Back to User Directory
+    </button>
+  </div>
+
+  <div class="loading-state" *ngIf="isLoading">
+    <mat-spinner diameter="44"></mat-spinner>
+    <p>Loading full profile telemetry...</p>
+  </div>
+
+  <div *ngIf="!isLoading && profile">
+    <!-- User Overview Header -->
+    <div class="profile-header mindmap-card">
+      <div class="avatar-box">
+        <mat-icon>account_circle</mat-icon>
+      </div>
+
+      <div class="profile-info">
+        <div class="name-row">
+          <h1 class="user-name">{{ profile.displayName }}</h1>
+          <span class="user-handle">&#64;{{ profile.userId }}</span>
+        </div>
+        <p class="generated-meta">Profile Generated: {{ profile.generatedAt | date: 'medium' }}</p>
+      </div>
+
+      <div class="flex-spacer"></div>
+
+      <!-- Confidence & Flags Badges -->
+      <div class="header-badges">
+        <div class="confidence-box">
+          <span class="conf-label">Overall Confidence</span>
+          <span class="conf-value">{{ profile.overallConfidence }}%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Integrity & Safety Flags Summary -->
+    <div class="flags-summary-bar">
+      <div class="flag-chip" [ngClass]="{'flag-alert': profile.safetyFlagCount > 0}">
+        <mat-icon>{{ profile.safetyFlagCount > 0 ? 'warning' : 'verified' }}</mat-icon>
+        <span>Safety Flags: <strong>{{ profile.safetyFlagCount }}</strong></span>
+      </div>
+
+      <div class="flag-chip" [ngClass]="{'flag-alert': profile.contradictionCount > 0}">
+        <mat-icon>sync_problem</mat-icon>
+        <span>Contradictions: <strong>{{ profile.contradictionCount }}</strong></span>
+      </div>
+
+      <div class="flag-chip" [ngClass]="{'flag-alert': profile.fastAnswerCount > 2}">
+        <mat-icon>speed</mat-icon>
+        <span>Rapid Responses: <strong>{{ profile.fastAnswerCount }}</strong></span>
+      </div>
+    </div>
+
+    <!-- Profiling Tabs -->
+    <mat-card class="tabs-card mindmap-card">
+      <mat-tab-group animationDuration="200ms" class="profile-tabs">
+        <!-- Level 1: Big Five -->
+        <mat-tab label="Level 1: Big Five Traits">
+          <div class="tab-body">
+            <h3 class="tab-heading">Five-Factor Model Dimension Scores</h3>
+            <p class="tab-subtitle">Normative percentile distribution (0 - 100) with psychometric reliability index.</p>
+
+            <div class="trait-bars-list">
+              <div class="trait-bar-item" *ngFor="let trait of profile.level1Scores">
+                <div class="trait-meta">
+                  <span class="trait-name">{{ trait.trait }}</span>
+                  <div class="trait-values">
+                    <span class="score-pill" [style.background-color]="getTraitColor(trait.score)">{{ trait.score }}/100</span>
+                    <span class="conf-tag">Conf: {{ trait.confidence }}%</span>
+                  </div>
+                </div>
+
+                <div class="custom-progress-track">
+                  <div
+                    class="custom-progress-fill"
+                    [style.width.%]="trait.score"
+                    [style.background-color]="getTraitColor(trait.score)">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+
+        <!-- Level 2: Stress & Complex Scenarios -->
+        <mat-tab label="Level 2: Stress &amp; Dilemmas">
+          <div class="tab-body">
+            <h3 class="tab-heading">Cognitive Stress &amp; Dilemma Metrics</h3>
+            <p class="tab-subtitle">Behavioral stability under pressure, ambiguity tolerance, and dark triad tendencies.</p>
+
+            <div class="level2-grid">
+              <!-- Ambiguity -->
+              <div class="metric-box">
+                <div class="metric-top">
+                  <span class="metric-title">Ambiguity Tolerance</span>
+                  <span class="metric-val">{{ profile.level2Scores.ambiguity }}/100</span>
+                </div>
+                <div class="custom-progress-track">
+                  <div
+                    class="custom-progress-fill"
+                    [style.width.%]="profile.level2Scores.ambiguity"
+                    [style.background-color]="getTraitColor(profile.level2Scores.ambiguity)">
+                  </div>
+                </div>
+                <p class="metric-expl">Capacity to navigate uncertain and conflicting scenario cues.</p>
+              </div>
+
+              <!-- Consistency -->
+              <div class="metric-box">
+                <div class="metric-top">
+                  <span class="metric-title">Decision Consistency</span>
+                  <span class="metric-val">{{ profile.level2Scores.consistency }}/100</span>
+                </div>
+                <div class="custom-progress-track">
+                  <div
+                    class="custom-progress-fill"
+                    [style.width.%]="profile.level2Scores.consistency"
+                    [style.background-color]="getTraitColor(profile.level2Scores.consistency)">
+                  </div>
+                </div>
+                <p class="metric-expl">Correlation between cross-validated scenario test items.</p>
+              </div>
+
+              <!-- Moral Flexibility -->
+              <div class="metric-box">
+                <div class="metric-top">
+                  <span class="metric-title">Moral Flexibility</span>
+                  <span class="metric-val">{{ profile.level2Scores.moralFlexibility }}/100</span>
+                </div>
+                <div class="custom-progress-track">
+                  <div
+                    class="custom-progress-fill"
+                    [style.width.%]="profile.level2Scores.moralFlexibility"
+                    style="background-color: #6366f1">
+                  </div>
+                </div>
+                <p class="metric-expl">Willingness to adapt moral principles based on context.</p>
+              </div>
+
+              <!-- Dark Theme -->
+              <div class="metric-box">
+                <div class="metric-top">
+                  <span class="metric-title">Dark Trait Tendency</span>
+                  <span class="metric-val">{{ profile.level2Scores.darkTheme }}/100</span>
+                </div>
+                <div class="custom-progress-track">
+                  <div
+                    class="custom-progress-fill"
+                    [style.width.%]="profile.level2Scores.darkTheme"
+                    [style.background-color]="getDarkTraitColor(profile.level2Scores.darkTheme)">
+                  </div>
+                </div>
+                <p class="metric-expl">Aggregated Machiavellianism and sub-clinical narcissism indicators.</p>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+
+        <!-- Level 3: Temperament Synthesis -->
+        <mat-tab label="Level 3: Temperament Synthesis">
+          <div class="tab-body">
+            <h3 class="tab-heading">Constitutional Temperament Synthesis</h3>
+            <p class="tab-subtitle">Holistic integration across behavioral and cognitive dimensions.</p>
+
+            <div class="temperament-showcase">
+              <div class="temperament-primary-card">
+                <div class="archetype-badge">Primary Archetype</div>
+                <h2 class="archetype-name">{{ profile.temperament.primaryType }}</h2>
+                <p class="archetype-desc">{{ profile.temperament.explanation }}</p>
+
+                <div class="archetype-meta">
+                  <span>Confidence: <strong>{{ profile.temperament.confidence }}%</strong></span>
+                </div>
+              </div>
+
+              <div class="breakdown-card">
+                <h4 class="breakdown-title">Temperamental Balance Ratio</h4>
+                <div class="breakdown-items">
+                  <div class="breakdown-row" *ngFor="let key of getTemperamentKeys()">
+                    <span class="key-name">{{ key }}</span>
+                    <div class="breakdown-track">
+                      <div class="breakdown-fill" [style.width.%]="profile.temperament.breakdown[key]"></div>
+                    </div>
+                    <span class="key-val">{{ profile.temperament.breakdown[key] }}%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card>
+
+    <app-disclaimer-footer></app-disclaimer-footer>
+  </div>
+</div>

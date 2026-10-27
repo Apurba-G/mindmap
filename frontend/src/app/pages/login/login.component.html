@@ -1,0 +1,81 @@
+<div class="login-page-container">
+  <mat-card class="login-card mindmap-card">
+    <div class="login-card-header">
+      <div class="logo-circle">
+        <mat-icon>psychology</mat-icon>
+      </div>
+      <h1 class="login-title">Sign In to MindMap</h1>
+      <p class="login-subtitle">Enter your user ID and password to access your assessment session</p>
+    </div>
+
+    <mat-card-content class="login-card-content">
+      <!-- Error / Lock Alert Messages -->
+      <div class="alert alert-danger" *ngIf="errorMessage">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ errorMessage }}</span>
+      </div>
+
+      <div class="alert alert-warn" *ngIf="accountLockedMessage">
+        <mat-icon>lock_clock</mat-icon>
+        <span>{{ accountLockedMessage }}</span>
+      </div>
+
+      <div class="alert alert-info" *ngIf="mustChangePasswordMessage">
+        <mat-icon>info</mat-icon>
+        <span>{{ mustChangePasswordMessage }}</span>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+        <!-- User ID -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>User ID</mat-label>
+          <input matInput formControlName="userId" placeholder="Enter your handle" autocomplete="username" />
+          <mat-icon matPrefix>person</mat-icon>
+          <mat-error *ngIf="loginForm.get('userId')?.hasError('required')">User ID is required</mat-error>
+        </mat-form-field>
+
+        <!-- Password with toggle visibility -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            [type]="hidePassword ? 'password' : 'text'"
+            formControlName="password"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+          />
+          <mat-icon matPrefix>lock</mat-icon>
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="hidePassword = !hidePassword"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hidePassword">
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="loginForm.get('password')?.hasError('required')">Password is required</mat-error>
+        </mat-form-field>
+
+        <div class="forgot-link-wrapper">
+          <a routerLink="/recover" class="forgot-link">Forgot password?</a>
+        </div>
+
+        <button
+          mat-flat-button
+          color="primary"
+          type="submit"
+          class="login-btn full-width"
+          [disabled]="loginForm.invalid || isLoading">
+          <mat-spinner *ngIf="isLoading" diameter="20" class="spinner-inline"></mat-spinner>
+          <span>{{ isLoading ? 'Signing In...' : 'Sign In' }}</span>
+        </button>
+      </form>
+    </mat-card-content>
+
+    <div class="card-footer">
+      <span>Don't have an account?</span>
+      <a routerLink="/register" class="register-link">Create account</a>
+    </div>
+  </mat-card>
+</div>

@@ -1,0 +1,32 @@
+.confirm-dialog-wrapper {
+  padding: 8px 4px;
+
+  .confirm-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+
+    .header-icon {
+      font-size: 26px;
+      width: 26px;
+      height: 26px;
+    }
+
+    .dialog-title {
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+  }
+
+  .dialog-content {
+    font-size: 0.95rem;
+    color: #475569;
+    line-height: 1.5;
+  }
+
+  .dialog-actions {
+    padding-top: 16px;
+  }
+}

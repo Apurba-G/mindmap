@@ -1,0 +1,186 @@
+.profile-container {
+  padding-top: 32px;
+  padding-bottom: 32px;
+
+  .loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 350px;
+    gap: 16px;
+    color: #64748b;
+  }
+
+  .profile-header-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 24px 28px;
+    background: #ffffff;
+    border-radius: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+
+    .avatar-circle {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, #3f51b5, #6366f1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      mat-icon {
+        color: #ffffff;
+        font-size: 36px;
+        width: 36px;
+        height: 36px;
+      }
+    }
+
+    .user-details {
+      .user-name {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: #0f172a;
+        margin: 0 0 4px 0;
+      }
+
+      .user-handle {
+        font-size: 0.95rem;
+        color: #64748b;
+        margin: 0;
+      }
+    }
+
+    .profile-actions {
+      button {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .btn-spinner {
+        margin-right: 6px;
+      }
+    }
+  }
+
+  .card-section-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 16px 0;
+  }
+
+  .status-card {
+    padding: 24px 28px;
+    margin-bottom: 24px;
+
+    .levels-status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+
+      .level-status-box {
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 16px;
+
+        .level-meta {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 8px;
+
+          .lvl-title {
+            font-weight: 600;
+            font-size: 0.92rem;
+            color: #0f172a;
+          }
+        }
+
+        .lvl-desc {
+          font-size: 0.85rem;
+          color: #64748b;
+          margin: 0;
+          line-height: 1.4;
+        }
+      }
+    }
+  }
+
+  .narrative-card {
+    padding: 24px 28px;
+    margin-bottom: 24px;
+
+    .narrative-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+
+      .narrative-icon {
+        color: #4f46e5;
+      }
+
+      .card-section-title {
+        margin: 0;
+      }
+    }
+
+    .narrative-text {
+      font-size: 1.02rem;
+      line-height: 1.65;
+      color: #334155;
+      margin: 0 0 20px 0;
+    }
+
+    .privacy-note {
+      background-color: #eff6ff;
+      border-left: 3px solid #3b82f6;
+      border-radius: 4px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      color: #1e40af;
+
+      mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+      }
+    }
+  }
+
+  .danger-zone-card {
+    padding: 24px 28px;
+    border: 1px solid #fee2e2;
+    background-color: #fffafb;
+
+    .danger-title {
+      color: #b91c1c;
+    }
+
+    .danger-desc {
+      font-size: 0.9rem;
+      color: #64748b;
+      margin-bottom: 20px;
+    }
+
+    .danger-actions {
+      button {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .btn-spinner {
+        margin-right: 6px;
+      }
+    }
+  }
+}

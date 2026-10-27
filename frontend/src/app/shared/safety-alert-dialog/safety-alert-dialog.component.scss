@@ -1,0 +1,103 @@
+.safety-dialog-wrapper {
+  padding: 12px 8px;
+
+  .dialog-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+
+    .icon-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background-color: #fee2e2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      mat-icon {
+        color: #ef4444;
+        font-size: 24px;
+      }
+    }
+
+    .dialog-title {
+      margin: 0;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #0f172a;
+    }
+  }
+
+  .dialog-content {
+    font-size: 0.95rem;
+    color: #334155;
+    line-height: 1.5;
+
+    .calm-message {
+      margin-bottom: 16px;
+    }
+
+    .helplines-card {
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+
+      .helpline-title {
+        margin: 0 0 12px 0;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #1e293b;
+      }
+
+      .helpline-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 10px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        mat-icon {
+          color: #3b82f6;
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+        }
+
+        .helpline-details {
+          display: flex;
+          flex-direction: column;
+          font-size: 0.88rem;
+
+          strong {
+            color: #0f172a;
+          }
+
+          a {
+            color: #2563eb;
+            text-decoration: none;
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+      }
+    }
+
+    .reminder-text {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin: 0;
+    }
+  }
+
+  .dialog-actions {
+    padding-top: 16px;
+  }
+}

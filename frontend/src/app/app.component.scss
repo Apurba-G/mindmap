@@ -1,0 +1,201 @@
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+
+  .main-toolbar {
+    height: 64px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    position: relative;
+    padding: 0 16px;
+
+    .menu-btn {
+      margin-right: 8px;
+    }
+
+    .brand-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      user-select: none;
+
+      .brand-icon {
+        width: 36px;
+        height: 36px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        mat-icon {
+          font-size: 22px;
+          width: 22px;
+          height: 22px;
+          color: #ffffff;
+        }
+      }
+
+      .brand-name {
+        font-size: 1.3rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: #ffffff;
+      }
+    }
+
+    .toolbar-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-right: 16px;
+
+      button {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: rgba(255, 255, 255, 0.9);
+
+        mat-icon {
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+        }
+
+        &.active-nav-link {
+          background-color: rgba(255, 255, 255, 0.15);
+          color: #ffffff;
+        }
+      }
+
+      .admin-nav-btn {
+        background: rgba(239, 68, 68, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+      }
+    }
+
+    .user-pill-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      padding: 0 12px;
+      height: 38px;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      .user-avatar-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+
+      .username-label {
+        font-weight: 500;
+        font-size: 0.9rem;
+      }
+    }
+
+    .anon-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      button {
+        font-weight: 500;
+      }
+    }
+  }
+
+  .sidenav-container {
+    flex: 1 1 auto;
+    overflow: hidden;
+
+    .app-sidenav {
+      width: 260px;
+      background: #ffffff;
+      border-right: 1px solid #e2e8f0;
+
+      .sidenav-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 20px 16px;
+
+        .admin-shield {
+          width: 36px;
+          height: 36px;
+          border-radius: 8px;
+          background: #fee2e2;
+          color: #dc2626;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          mat-icon {
+            font-size: 22px;
+            width: 22px;
+            height: 22px;
+          }
+        }
+
+        .sidenav-title {
+          font-weight: 700;
+          font-size: 1.1rem;
+          color: #0f172a;
+        }
+      }
+
+      .sidenav-list {
+        padding-top: 8px;
+
+        a {
+          mat-icon {
+            color: #64748b;
+          }
+
+          &:hover {
+            mat-icon {
+              color: #3f51b5;
+            }
+          }
+        }
+      }
+    }
+
+    .main-content {
+      height: 100%;
+      overflow-y: auto;
+      background-color: #f8fafc;
+    }
+  }
+}
+
+.user-menu-header {
+  padding: 12px 16px;
+
+  .menu-user-name {
+    font-weight: 600;
+    color: #0f172a;
+    font-size: 0.95rem;
+  }
+
+  .menu-user-handle {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.8rem;
+    color: #64748b;
+  }
+}
+
+.logout-menu-item {
+  color: #ef4444;
+}
+
+@media (max-width: 768px) {
+  .nav-text {
+    display: none;
+  }
+}

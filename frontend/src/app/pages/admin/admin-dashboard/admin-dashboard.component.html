@@ -1,0 +1,117 @@
+<div class="container admin-dashboard-container">
+  <div class="admin-header">
+    <div>
+      <h1 class="page-title">Administration Console</h1>
+      <p class="page-subtitle">Platform metrics, audit tracking, scoring rules, and safety moderation</p>
+    </div>
+    <div class="admin-badge">
+      <span class="badge badge-info">Administrator Access</span>
+    </div>
+  </div>
+
+  <div class="loading-state" *ngIf="isLoading">
+    <mat-spinner diameter="44"></mat-spinner>
+    <p>Loading analytics...</p>
+  </div>
+
+  <div *ngIf="!isLoading">
+    <!-- Top Stats Cards -->
+    <div class="stats-grid">
+      <!-- Total Users -->
+      <mat-card class="stat-card mindmap-card">
+        <div class="stat-icon-wrapper user-icon">
+          <mat-icon>people</mat-icon>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{ stats.totalUsers }}</span>
+          <span class="stat-label">Total Users</span>
+        </div>
+      </mat-card>
+
+      <!-- Completed L1 -->
+      <mat-card class="stat-card mindmap-card">
+        <div class="stat-icon-wrapper l1-icon">
+          <mat-icon>looks_one</mat-icon>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{ stats.completedL1 }}</span>
+          <span class="stat-label">Completed Level 1</span>
+        </div>
+      </mat-card>
+
+      <!-- Completed L2 -->
+      <mat-card class="stat-card mindmap-card">
+        <div class="stat-icon-wrapper l2-icon">
+          <mat-icon>looks_two</mat-icon>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{ stats.completedL2 }}</span>
+          <span class="stat-label">Completed Level 2</span>
+        </div>
+      </mat-card>
+
+      <!-- Completed L3 -->
+      <mat-card class="stat-card mindmap-card">
+        <div class="stat-icon-wrapper l3-icon">
+          <mat-icon>looks_3</mat-icon>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{ stats.completedL3 }}</span>
+          <span class="stat-label">Completed Level 3</span>
+        </div>
+      </mat-card>
+
+      <!-- Safety Flags -->
+      <mat-card class="stat-card mindmap-card" [ngClass]="{'has-flags': stats.safetyFlagsCount > 0}">
+        <div class="stat-icon-wrapper flag-icon">
+          <mat-icon>notification_important</mat-icon>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{ stats.safetyFlagsCount }}</span>
+          <span class="stat-label">Safety Alerts Triggered</span>
+        </div>
+      </mat-card>
+    </div>
+
+    <!-- Quick Navigation Hub -->
+    <h2 class="section-title">Administrative Modules</h2>
+
+    <div class="modules-grid">
+      <mat-card class="module-card mindmap-card" (click)="navigateTo('/admin/users')">
+        <div class="module-icon">
+          <mat-icon>manage_accounts</mat-icon>
+        </div>
+        <h3>User Management</h3>
+        <p>Browse registered users, inspect completed tier status, and review full psychological profiles.</p>
+        <button mat-button color="primary">Manage Users &rarr;</button>
+      </mat-card>
+
+      <mat-card class="module-card mindmap-card" (click)="navigateTo('/admin/safety-flags')">
+        <div class="module-icon warn-icon">
+          <mat-icon>health_and_safety</mat-icon>
+        </div>
+        <h3>Safety Moderation</h3>
+        <p>Monitor crisis triggers, distress response markers, and safety intervention logs.</p>
+        <button mat-button color="warn">Review Flags &rarr;</button>
+      </mat-card>
+
+      <mat-card class="module-card mindmap-card" (click)="navigateTo('/admin/scoring-rules')">
+        <div class="module-icon">
+          <mat-icon>tune</mat-icon>
+        </div>
+        <h3>Scoring Rules Engine</h3>
+        <p>Calibrate psychometric scoring algorithms, weight vectors, and trait thresholds.</p>
+        <button mat-button color="primary">Configure Rules &rarr;</button>
+      </mat-card>
+
+      <mat-card class="module-card mindmap-card" (click)="navigateTo('/admin/audit-log')">
+        <div class="module-icon">
+          <mat-icon>history_edu</mat-icon>
+        </div>
+        <h3>Audit &amp; Compliance Log</h3>
+        <p>Trace administrative actions, authorization events, and profile access logs with IP provenance.</p>
+        <button mat-button color="primary">Inspect Logs &rarr;</button>
+      </mat-card>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,111 @@
+.login-page-container {
+  min-height: calc(100vh - 70px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px 16px;
+  background-color: #f8fafc;
+
+  .login-card {
+    width: 100%;
+    max-width: 440px;
+    padding: 32px 28px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  }
+
+  .login-card-header {
+    text-align: center;
+    margin-bottom: 24px;
+
+    .logo-circle {
+      width: 52px;
+      height: 52px;
+      background: linear-gradient(135deg, #3f51b5, #5c6bc0);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+
+      mat-icon {
+        color: #ffffff;
+        font-size: 30px;
+        width: 30px;
+        height: 30px;
+      }
+    }
+
+    .login-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0 0 6px 0;
+    }
+
+    .login-subtitle {
+      font-size: 0.88rem;
+      color: #64748b;
+      margin: 0;
+    }
+  }
+
+  .login-card-content {
+    padding: 0;
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .forgot-link-wrapper {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: -6px;
+      margin-bottom: 20px;
+
+      .forgot-link {
+        font-size: 0.85rem;
+        color: #3f51b5;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    .login-btn {
+      height: 44px;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+
+      .spinner-inline {
+        margin-right: 8px;
+      }
+    }
+  }
+
+  .card-footer {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid #f1f5f9;
+    text-align: center;
+    font-size: 0.88rem;
+    color: #64748b;
+
+    .register-link {
+      margin-left: 6px;
+      color: #3f51b5;
+      font-weight: 600;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

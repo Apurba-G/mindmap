@@ -1,0 +1,52 @@
+<div class="safety-dialog-wrapper">
+  <div class="dialog-header">
+    <div class="icon-circle">
+      <mat-icon>favorite</mat-icon>
+    </div>
+    <h2 mat-dialog-title class="dialog-title">We Care About Your Well-Being</h2>
+  </div>
+
+  <mat-dialog-content class="dialog-content">
+    <p class="calm-message">
+      {{ data?.message || 'Your responses indicated you might be experiencing distress or difficult emotions right now. You are not alone, and supportive help is available immediately.' }}
+    </p>
+
+    <div class="helplines-card">
+      <h3 class="helpline-title">Free, Confidential Support Available 24/7:</h3>
+
+      <div class="helpline-item">
+        <mat-icon>phone</mat-icon>
+        <div class="helpline-details">
+          <strong>988 Suicide & Crisis Lifeline</strong>
+          <span>Call or Text <strong>988</strong> (US & Canada)</span>
+        </div>
+      </div>
+
+      <div class="helpline-item">
+        <mat-icon>sms</mat-icon>
+        <div class="helpline-details">
+          <strong>Crisis Text Line</strong>
+          <span>Text <strong>HOME</strong> to <strong>741741</strong></span>
+        </div>
+      </div>
+
+      <div class="helpline-item">
+        <mat-icon>public</mat-icon>
+        <div class="helpline-details">
+          <strong>International Helplines</strong>
+          <span>Visit <a href="https://findahelpline.com" target="_blank" rel="noopener noreferrer">findahelpline.com</a> for worldwide resources</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="reminder-text">
+      You are always welcome to pause, step away, or discontinue an assessment at any moment. Your safety and comfort come first.
+    </p>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="dialog-actions">
+    <button mat-flat-button color="primary" (click)="onClose()">
+      I Understand & Wish to Continue
+    </button>
+  </mat-dialog-actions>
+</div>

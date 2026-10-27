@@ -1,0 +1,306 @@
+.register-page-container {
+  min-height: calc(100vh - 70px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 32px 16px;
+  background-color: #f8fafc;
+
+  .register-card-wrapper {
+    width: 100%;
+    max-width: 680px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+    padding: 32px 24px;
+  }
+
+  .register-header {
+    text-align: center;
+    margin-bottom: 24px;
+
+    .logo-circle {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, #3f51b5, #7986cb);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+
+      mat-icon {
+        color: #ffffff;
+        font-size: 32px;
+        width: 32px;
+        height: 32px;
+      }
+    }
+
+    .title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0 0 6px 0;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      color: #64748b;
+      margin: 0;
+    }
+  }
+
+  .mindmap-stepper {
+    background: transparent;
+  }
+
+  .stepper-form {
+    padding-top: 16px;
+  }
+
+  .availability-status {
+    display: flex;
+    align-items: center;
+    padding-right: 8px;
+
+    .status-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+
+      &.success-icon {
+        color: #10b981;
+      }
+
+      &.error-icon {
+        color: #ef4444;
+      }
+    }
+  }
+
+  .hint-success {
+    color: #10b981 !important;
+    font-weight: 500;
+  }
+
+  .hint-error {
+    color: #ef4444 !important;
+    font-weight: 500;
+  }
+
+  .suggestions-container {
+    margin-top: -8px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+
+    .suggestions-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #64748b;
+    }
+
+    .chips-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+
+      .suggestion-chip {
+        background: #e0e7ff;
+        color: #3730a3;
+        border: 1px solid #c7d2fe;
+        border-radius: 12px;
+        padding: 3px 10px;
+        font-size: 0.78rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background: #c7d2fe;
+          color: #312e81;
+        }
+      }
+    }
+  }
+
+  .step-actions {
+    margin-top: 24px;
+    display: flex;
+    justify-content: flex-end;
+
+    .submit-btn {
+      min-width: 180px;
+      height: 44px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .inline-spinner {
+      margin-right: 6px;
+    }
+  }
+
+  .login-redirect {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 0.88rem;
+    color: #64748b;
+
+    a {
+      color: #3f51b5;
+      font-weight: 600;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  /* Step 2 Styles */
+  .step-recovery-wrapper {
+    padding-top: 16px;
+
+    .warning-banner {
+      margin-bottom: 20px;
+    }
+
+    .paragraph-card {
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 24px;
+
+      .paragraph-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+
+        .card-title {
+          font-weight: 600;
+          color: #334155;
+          font-size: 0.95rem;
+        }
+
+        .action-buttons {
+          display: flex;
+          gap: 8px;
+
+          .btn-action {
+            height: 34px;
+            font-size: 0.82rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+
+            mat-icon {
+              font-size: 16px;
+              width: 16px;
+              height: 16px;
+            }
+          }
+        }
+      }
+
+      .paragraph-box {
+        background: #ffffff;
+        border: 1px dashed #94a3b8;
+        border-radius: 6px;
+        padding: 16px;
+
+        .recovery-text {
+          font-family: 'Roboto Mono', monospace;
+          font-size: 0.92rem;
+          line-height: 1.6;
+          color: #0f172a;
+          margin: 0;
+          user-select: all;
+          word-break: break-word;
+        }
+      }
+    }
+
+    .verification-instructions {
+      margin-bottom: 16px;
+
+      h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #1e293b;
+        margin: 0 0 4px 0;
+      }
+
+      p {
+        font-size: 0.85rem;
+        color: #64748b;
+        margin: 0;
+      }
+    }
+  }
+
+  /* Step 3 Styles */
+  .confirmation-wrapper {
+    padding: 32px 16px;
+    text-align: center;
+
+    .success-icon-badge {
+      width: 72px;
+      height: 72px;
+      background-color: #dcfce7;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+
+      mat-icon {
+        color: #16a34a;
+        font-size: 44px;
+        width: 44px;
+        height: 44px;
+      }
+    }
+
+    .welcome-heading {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0 0 8px 0;
+    }
+
+    .user-handle-highlight {
+      font-size: 1.1rem;
+      color: #3b82f6;
+      margin: 0 0 20px 0;
+    }
+
+    .info-box {
+      max-width: 500px;
+      margin: 0 auto 28px auto;
+      text-align: left;
+    }
+
+    .confirmation-actions {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+
+      button {
+        height: 44px;
+        padding: 0 24px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+    }
+  }
+}

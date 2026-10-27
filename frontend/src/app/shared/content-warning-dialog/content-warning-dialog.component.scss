@@ -1,0 +1,65 @@
+.content-warning-wrapper {
+  padding: 12px 8px;
+
+  .warning-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+
+    .warning-icon-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background-color: #fff7ed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      mat-icon {
+        color: #ea580c;
+        font-size: 26px;
+      }
+    }
+
+    .dialog-title {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #0f172a;
+    }
+  }
+
+  .dialog-content {
+    .notice-box {
+      background-color: #fafaf9;
+      border: 1px solid #e7e5e4;
+      border-radius: 8px;
+      padding: 16px;
+      font-size: 0.92rem;
+      color: #44403c;
+      line-height: 1.5;
+
+      p {
+        margin: 0 0 12px 0;
+      }
+
+      .guidelines-list {
+        margin: 0;
+        padding-left: 20px;
+
+        li {
+          margin-bottom: 6px;
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+  }
+
+  .dialog-actions {
+    padding-top: 16px;
+    gap: 8px;
+  }
+}

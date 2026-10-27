@@ -1,0 +1,32 @@
+<div class="content-warning-wrapper">
+  <div class="warning-header">
+    <div class="warning-icon-badge">
+      <mat-icon>warning_amber</mat-icon>
+    </div>
+    <h2 mat-dialog-title class="dialog-title">
+      {{ data?.title || 'Sensitive Content Notice' }}
+    </h2>
+  </div>
+
+  <mat-dialog-content class="dialog-content">
+    <div class="notice-box">
+      <p>
+        {{ data?.message || 'The upcoming section presents hypothetical moral dilemmas and situations designed to assess cognitive processing of difficult scenarios and dark personality traits.' }}
+      </p>
+      <ul class="guidelines-list">
+        <li>These questions are strictly hypothetical for psychometric profiling.</li>
+        <li>You may skip any question in this section without penalty.</li>
+        <li>You may exit the assessment at any time and return to the dashboard.</li>
+      </ul>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="dialog-actions">
+    <button mat-button color="basic" (click)="onDecline()">
+      Return to Dashboard
+    </button>
+    <button mat-flat-button color="warn" (click)="onConfirm()">
+      I Acknowledge &amp; Proceed
+    </button>
+  </mat-dialog-actions>
+</div>

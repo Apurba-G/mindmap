@@ -1,0 +1,208 @@
+<div class="register-page-container">
+  <div class="register-card-wrapper">
+    <div class="register-header">
+      <div class="logo-circle">
+        <mat-icon>psychology</mat-icon>
+      </div>
+      <h1 class="title">Join MindMap</h1>
+      <p class="subtitle">Create your secure account for psychological self-awareness</p>
+    </div>
+
+    <mat-stepper [linear]="true" #stepper class="mindmap-stepper">
+      <!-- Step 1: Account Info -->
+      <mat-step [stepControl]="accountForm">
+        <ng-template matStepLabel>Account Information</ng-template>
+        <form [formGroup]="accountForm" (ngSubmit)="onSubmitStep1()" class="stepper-form">
+
+          <!-- Display Name -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Display Name</mat-label>
+            <input matInput formControlName="displayName" placeholder="e.g. Alex Morgan" autocomplete="name" />
+            <mat-icon matPrefix>badge</mat-icon>
+            <mat-error *ngIf="accountForm.get('displayName')?.hasError('required')">Display name is required</mat-error>
+            <mat-error *ngIf="accountForm.get('displayName')?.hasError('minlength')">Minimum 2 characters required</mat-error>
+            <mat-error *ngIf="accountForm.get('displayName')?.hasError('maxlength')">Maximum 100 characters allowed</mat-error>
+          </mat-form-field>
+
+          <!-- User ID Input with Availability Check -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>User ID (Handle)</mat-label>
+            <input matInput formControlName="userId" placeholder="e.g. alex_m99" autocomplete="username" />
+            <mat-icon matPrefix>alternate_email</mat-icon>
+
+            <!-- Availability status suffix -->
+            <div matSuffix class="availability-status">
+              <mat-spinner *ngIf="isCheckingUserId" diameter="20"></mat-spinner>
+              <mat-icon *ngIf="!isCheckingUserId && userIdAvailable === true" class="status-icon success-icon">check_circle</mat-icon>
+              <mat-icon *ngIf="!isCheckingUserId && userIdAvailable === false" class="status-icon error-icon">cancel</mat-icon>
+            </div>
+
+            <mat-hint *ngIf="userIdAvailable === true" class="hint-success">✓ User ID is available</mat-hint>
+            <mat-hint *ngIf="userIdAvailable === false" class="hint-error">✗ {{ userIdAvailabilityMessage }}</mat-hint>
+            <mat-hint *ngIf="userIdAvailable === null && !accountForm.get('userId')?.errors">Letters, numbers, dots, and underscores (4-20 chars)</mat-hint>
+
+            <mat-error *ngIf="accountForm.get('userId')?.hasError('required')">User ID is required</mat-error>
+            <mat-error *ngIf="accountForm.get('userId')?.hasError('minlength')">User ID must be at least 4 characters</mat-error>
+            <mat-error *ngIf="accountForm.get('userId')?.hasError('maxlength')">User ID cannot exceed 20 characters</mat-error>
+            <mat-error *ngIf="accountForm.get('userId')?.hasError('pattern')">Only lowercase letters, numbers, '.', and '_' are allowed</mat-error>
+          </mat-form-field>
+
+          <!-- Suggestions Chips -->
+          <div class="suggestions-container" *ngIf="suggestions.length > 0">
+            <span class="suggestions-label">Suggestions:</span>
+            <div class="chips-group">
+                <button
+                        type="button"
+                        class="suggestion-chip"
+                        *ngFor="let s of suggestions"
+                        (click)="selectSuggestion(s)">
+                    &#64;{{ s }}
+                </button>
+            </div>
+          </div>
+
+          <!-- Password -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" formControlName="password" placeholder="Choose a strong password" autocomplete="new-password" />
+            <mat-icon matPrefix>lock</mat-icon>
+            <mat-error *ngIf="accountForm.get('password')?.hasError('required')">Password is required</mat-error>
+            <mat-error *ngIf="accountForm.get('password')?.hasError('minlength')">Password must be at least 8 characters</mat-error>
+          </mat-form-field>
+
+          <!-- Password Strength Meter Component -->
+          <app-password-strength [password]="accountForm.get('password')?.value || ''"></app-password-strength>
+
+          <!-- Confirm Password -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Confirm Password</mat-label>
+            <input matInput type="password" formControlName="confirmPassword" placeholder="Re-enter your password" autocomplete="new-password" />
+            <mat-icon matPrefix>lock_reset</mat-icon>
+            <mat-error *ngIf="accountForm.get('confirmPassword')?.hasError('required')">Please confirm your password</mat-error>
+            <mat-error *ngIf="accountForm.hasError('passwordMismatch') && accountForm.get('confirmPassword')?.touched">
+              Passwords do not match
+            </mat-error>
+          </mat-form-field>
+
+          <div class="step-actions">
+            <button
+              mat-flat-button
+              color="primary"
+              type="submit"
+              class="submit-btn"
+              [disabled]="accountForm.invalid || userIdAvailable === false || isSubmitting">
+              <mat-spinner *ngIf="isSubmitting" diameter="18" class="inline-spinner"></mat-spinner>
+              <span>{{ isSubmitting ? 'Creating Account...' : 'Continue to Recovery Setup' }}</span>
+            </button>
+          </div>
+
+          <div class="login-redirect">
+            Already have an account? <a routerLink="/login">Sign in</a>
+          </div>
+        </form>
+      </mat-step>
+
+      <!-- Step 2: Recovery Paragraph -->
+      <mat-step [stepControl]="recoveryVerificationForm">
+        <ng-template matStepLabel>Recovery Paragraph</ng-template>
+        <div class="step-recovery-wrapper">
+
+          <div class="alert alert-danger warning-banner">
+            <mat-icon>warning</mat-icon>
+            <div>
+              <strong>Critical Security Notice:</strong>
+              Save this paragraph now. It will <strong>NOT</strong> be shown again. If you lose both your password and this paragraph, your account and assessment data cannot be recovered.
+            </div>
+          </div>
+
+          <!-- Recovery Paragraph Card -->
+          <div class="paragraph-card">
+            <div class="paragraph-header">
+              <span class="card-title">Your Unique Recovery Key</span>
+              <div class="action-buttons">
+                <button mat-stroked-button (click)="copyParagraph()" type="button" class="btn-action">
+                  <mat-icon>content_copy</mat-icon>
+                  <span>Copy</span>
+                </button>
+                <button mat-stroked-button (click)="downloadParagraph()" type="button" class="btn-action">
+                  <mat-icon>download</mat-icon>
+                  <span>Download .txt</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="paragraph-box">
+              <p class="recovery-text">{{ generatedRecoveryParagraph }}</p>
+            </div>
+          </div>
+
+          <!-- Sentence Verification Inputs -->
+          <div class="verification-instructions">
+            <h3>Verify you have saved your paragraph:</h3>
+            <p>Please enter the first and last sentence of the paragraph above to confirm:</p>
+          </div>
+
+          <form [formGroup]="recoveryVerificationForm" class="verification-form">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Type the FIRST sentence of your paragraph</mat-label>
+              <textarea matInput rows="2" formControlName="firstSentence" placeholder="First sentence..."></textarea>
+              <mat-error *ngIf="recoveryVerificationForm.get('firstSentence')?.hasError('required')">First sentence is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Type the LAST sentence of your paragraph</mat-label>
+              <textarea matInput rows="2" formControlName="lastSentence" placeholder="Last sentence..."></textarea>
+              <mat-error *ngIf="recoveryVerificationForm.get('lastSentence')?.hasError('required')">Last sentence is required</mat-error>
+            </mat-form-field>
+
+            <div class="step-actions">
+              <button
+                mat-flat-button
+                color="primary"
+                type="button"
+                class="submit-btn"
+                [disabled]="!isRecoverySentenceValid()"
+                (click)="onSubmitStep2()">
+                Confirm &amp; Proceed
+              </button>
+            </div>
+          </form>
+        </div>
+      </mat-step>
+
+      <!-- Step 3: Confirmation -->
+      <mat-step>
+        <ng-template matStepLabel>Account Ready</ng-template>
+        <div class="confirmation-wrapper">
+          <div class="success-icon-badge">
+            <mat-icon>check_circle</mat-icon>
+          </div>
+
+          <h2 class="welcome-heading">Account Created Successfully!</h2>
+            <p class="user-handle-highlight">
+                Your user ID is <strong>&#64;{{ createdUserId }}</strong>
+            </p>
+
+          <div class="alert alert-info info-box">
+            <mat-icon>lock</mat-icon>
+            <div>
+              Your recovery paragraph has been committed to cryptographic storage. Remember to store your backup file in a secure location.
+            </div>
+          </div>
+
+          <div class="confirmation-actions">
+            <button mat-flat-button color="primary" class="primary-action-btn" (click)="navigateToLevel1()">
+              <mat-icon>play_arrow</mat-icon>
+              <span>Start Level 1 Assessment</span>
+            </button>
+
+            <button mat-stroked-button class="secondary-action-btn" (click)="navigateToDashboard()">
+              <mat-icon>dashboard</mat-icon>
+              <span>Go to Dashboard</span>
+            </button>
+          </div>
+        </div>
+      </mat-step>
+    </mat-stepper>
+  </div>
+</div>

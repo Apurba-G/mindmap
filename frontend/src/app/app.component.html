@@ -1,0 +1,143 @@
+<div class="app-layout">
+  <!-- Top Application Toolbar -->
+  <mat-toolbar color="primary" class="main-toolbar">
+    <button
+      mat-icon-button
+      *ngIf="isAuthenticated() && isAdmin()"
+      (click)="sidenav?.toggle()"
+      class="menu-btn"
+      aria-label="Toggle navigation menu">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <div class="brand-container" routerLink="/dashboard">
+      <div class="brand-icon">
+        <mat-icon>psychology</mat-icon>
+      </div>
+      <span class="brand-name">MindMap</span>
+    </div>
+
+    <span class="flex-spacer"></span>
+
+    <!-- Navigation Links for Logged-in Users -->
+    <div class="toolbar-nav-links" *ngIf="isAuthenticated()">
+      <button mat-button routerLink="/dashboard" routerLinkActive="active-nav-link">
+        <mat-icon>dashboard</mat-icon>
+        <span class="nav-text">Dashboard</span>
+      </button>
+
+      <button mat-button routerLink="/profile" routerLinkActive="active-nav-link">
+        <mat-icon>account_circle</mat-icon>
+        <span class="nav-text">My Profile</span>
+      </button>
+
+      <button
+        mat-button
+        *ngIf="isAdmin()"
+        routerLink="/admin"
+        routerLinkActive="active-nav-link"
+        class="admin-nav-btn">
+        <mat-icon>admin_panel_settings</mat-icon>
+        <span class="nav-text">Admin</span>
+      </button>
+    </div>
+
+    <!-- User Account Menu -->
+    <div class="user-menu-wrapper" *ngIf="isAuthenticated(); else loggedOutTemplate">
+      <button mat-button [matMenuTriggerFor]="userMenu" class="user-pill-btn">
+        <mat-icon class="user-avatar-icon">person</mat-icon>
+        <span class="username-label">{{ (currentUser$ | async)?.displayName || 'Account' }}</span>
+        <mat-icon>arrow_drop_down</mat-icon>
+      </button>
+
+      <mat-menu #userMenu="matMenu" xPosition="before">
+        <div class="user-menu-header">
+          <div class="menu-user-name">{{ (currentUser$ | async)?.displayName }}</div>
+          <div class="menu-user-handle">&#64;{{ (currentUser$ | async)?.userId }}</div>
+        </div>
+        <mat-divider></mat-divider>
+
+        <button mat-menu-item routerLink="/profile">
+          <mat-icon>person_outline</mat-icon>
+          <span>Profile Summary</span>
+        </button>
+
+        <button mat-menu-item routerLink="/change-password">
+          <mat-icon>lock_outline</mat-icon>
+          <span>Change Password</span>
+        </button>
+
+        <mat-divider></mat-divider>
+
+        <button mat-menu-item (click)="logout()" class="logout-menu-item">
+          <mat-icon color="warn">logout</mat-icon>
+          <span>Sign Out</span>
+        </button>
+      </mat-menu>
+    </div>
+
+    <!-- Anonymous Links -->
+    <ng-template #loggedOutTemplate>
+      <div class="anon-actions">
+        <button mat-button routerLink="/login">Sign In</button>
+        <button mat-flat-button color="accent" routerLink="/register">Register</button>
+      </div>
+    </ng-template>
+  </mat-toolbar>
+
+  <!-- Side Navigation Container (for Admin or mobile) -->
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav
+      #sidenav
+      mode="over"
+      class="app-sidenav"
+      *ngIf="isAuthenticated() && isAdmin()">
+      <div class="sidenav-header">
+        <div class="admin-shield">
+          <mat-icon>shield</mat-icon>
+        </div>
+        <div class="sidenav-title">Administration</div>
+      </div>
+      <mat-divider></mat-divider>
+
+      <mat-nav-list class="sidenav-list">
+        <a mat-list-item routerLink="/admin" (click)="sidenav?.close()">
+          <mat-icon matListItemIcon>dashboard</mat-icon>
+          <span matListItemTitle>Admin Console</span>
+        </a>
+
+        <a mat-list-item routerLink="/admin/users" (click)="sidenav?.close()">
+          <mat-icon matListItemIcon>people</mat-icon>
+          <span matListItemTitle>User Directory</span>
+        </a>
+
+        <a mat-list-item routerLink="/admin/safety-flags" (click)="sidenav?.close()">
+          <mat-icon matListItemIcon>notification_important</mat-icon>
+          <span matListItemTitle>Safety Flags</span>
+        </a>
+
+        <a mat-list-item routerLink="/admin/scoring-rules" (click)="sidenav?.close()">
+          <mat-icon matListItemIcon>tune</mat-icon>
+          <span matListItemTitle>Scoring Rules</span>
+        </a>
+
+        <a mat-list-item routerLink="/admin/audit-log" (click)="sidenav?.close()">
+          <mat-icon matListItemIcon>history</mat-icon>
+          <span matListItemTitle>Audit Ledger</span>
+        </a>
+
+        <mat-divider></mat-divider>
+
+        <a mat-list-item routerLink="/dashboard" (click)="sidenav?.close()">
+          <mat-icon matListItemIcon>home</mat-icon>
+          <span matListItemTitle>User Dashboard</span>
+        </a>
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <!-- Main Content Area -->
+    <mat-sidenav-content class="main-content">
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

@@ -1,0 +1,132 @@
+<div class="recover-page-container">
+  <mat-card class="recover-card mindmap-card">
+    <div class="recover-card-header">
+      <div class="icon-circle">
+        <mat-icon>settings_backup_restore</mat-icon>
+      </div>
+      <h1 class="recover-title">Account Recovery</h1>
+      <p class="recover-subtitle">Recover access using your confidential recovery paragraph</p>
+    </div>
+
+    <mat-card-content class="recover-card-content">
+      <!-- Error Alert -->
+      <div class="alert alert-danger" *ngIf="errorMessage">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ errorMessage }}</span>
+      </div>
+
+      <!-- Step 1: User ID and Recovery Paragraph -->
+      <div *ngIf="currentStep === 1">
+        <form [formGroup]="step1Form" (ngSubmit)="onSubmitStep1()" class="recover-form">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>User ID</mat-label>
+            <input matInput formControlName="userId" placeholder="Enter your user ID" autocomplete="username" />
+            <mat-icon matPrefix>person</mat-icon>
+            <mat-error *ngIf="step1Form.get('userId')?.hasError('required')">User ID is required</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Recovery Paragraph</mat-label>
+            <textarea
+              matInput
+              rows="6"
+              formControlName="paragraph"
+              placeholder="Paste your exact recovery paragraph here..."></textarea>
+            <mat-icon matPrefix>key</mat-icon>
+            <mat-hint>Paste the full text provided when your account was registered</mat-hint>
+            <mat-error *ngIf="step1Form.get('paragraph')?.hasError('required')">Recovery paragraph is required</mat-error>
+            <mat-error *ngIf="step1Form.get('paragraph')?.hasError('minlength')">Paragraph seems too short</mat-error>
+          </mat-form-field>
+
+          <button
+            mat-flat-button
+            color="primary"
+            type="submit"
+            class="action-btn full-width"
+            [disabled]="step1Form.invalid || isSubmitting">
+            <mat-spinner *ngIf="isSubmitting" diameter="20" class="spinner-inline"></mat-spinner>
+            <span>{{ isSubmitting ? 'Verifying Paragraph...' : 'Verify Paragraph' }}</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Step 2: Set New Password -->
+      <div *ngIf="currentStep === 2">
+        <div class="alert alert-info">
+          <mat-icon>verified</mat-icon>
+          <span>Recovery key verified. Please set a new secure password.</span>
+        </div>
+
+        <form [formGroup]="step2Form" (ngSubmit)="onSubmitStep2()" class="recover-form">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>New Password</mat-label>
+            <input matInput type="password" formControlName="newPassword" placeholder="Enter new password" />
+            <mat-icon matPrefix>lock</mat-icon>
+            <mat-error *ngIf="step2Form.get('newPassword')?.hasError('required')">New password is required</mat-error>
+            <mat-error *ngIf="step2Form.get('newPassword')?.hasError('minlength')">Must be at least 8 characters</mat-error>
+          </mat-form-field>
+
+          <app-password-strength [password]="step2Form.get('newPassword')?.value || ''"></app-password-strength>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Confirm New Password</mat-label>
+            <input matInput type="password" formControlName="confirmPassword" placeholder="Confirm new password" />
+            <mat-icon matPrefix>lock_reset</mat-icon>
+            <mat-error *ngIf="step2Form.get('confirmPassword')?.hasError('required')">Confirm password is required</mat-error>
+            <mat-error *ngIf="step2Form.hasError('passwordMismatch') && step2Form.get('confirmPassword')?.touched">
+              Passwords do not match
+            </mat-error>
+          </mat-form-field>
+
+          <button
+            mat-flat-button
+            color="primary"
+            type="submit"
+            class="action-btn full-width"
+            [disabled]="step2Form.invalid || isSubmitting">
+            <mat-spinner *ngIf="isSubmitting" diameter="20" class="spinner-inline"></mat-spinner>
+            <span>{{ isSubmitting ? 'Resetting Password...' : 'Reset Password &amp; Generate New Key' }}</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Step 3: Success & New Recovery Paragraph -->
+      <div *ngIf="currentStep === 3" class="success-step">
+        <div class="alert alert-warn warning-box">
+          <mat-icon>warning</mat-icon>
+          <div>
+            <strong>Notice:</strong> Your old recovery paragraph has been permanently invalidated. 
+            You must copy or download this <strong>NEW</strong> recovery paragraph now.
+          </div>
+        </div>
+
+        <div class="new-paragraph-card">
+          <div class="card-top">
+            <span class="label">New Recovery Key:</span>
+            <div class="btns">
+              <button mat-stroked-button (click)="copyNewParagraph()">
+                <mat-icon>content_copy</mat-icon> Copy
+              </button>
+              <button mat-stroked-button (click)="downloadNewParagraph()">
+                <mat-icon>download</mat-icon> Download .txt
+              </button>
+            </div>
+          </div>
+          <div class="text-box">
+            <p>{{ newRecoveryParagraph }}</p>
+          </div>
+        </div>
+
+        <button mat-flat-button color="primary" class="action-btn full-width" (click)="goToLogin()">
+          Proceed to Sign In
+        </button>
+      </div>
+    </mat-card-content>
+
+    <div class="card-footer" *ngIf="currentStep !== 3">
+      <a routerLink="/login" class="back-link">
+        <mat-icon>arrow_back</mat-icon> Back to Sign In
+      </a>
+    </div>
+  </mat-card>
+</div>

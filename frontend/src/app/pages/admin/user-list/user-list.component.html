@@ -1,0 +1,150 @@
+<div class="container user-list-container">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">User Directory</h1>
+      <p class="page-subtitle">View, search, filter registered users, and inspect psychometric completion profiles.</p>
+    </div>
+    <button mat-stroked-button routerLink="/admin">
+      <mat-icon>arrow_back</mat-icon> Back to Dashboard
+    </button>
+  </div>
+
+  <mat-card class="table-card mindmap-card">
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Search by User ID or Name</mat-label>
+        <input matInput [formControl]="searchControl" placeholder="Type user ID or display name..." />
+        <mat-icon matPrefix>search</mat-icon>
+        <button
+          mat-icon-button
+          matSuffix
+          *ngIf="searchControl.value"
+          (click)="searchControl.setValue('')">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-overlay" *ngIf="isLoading">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <!-- Users Table -->
+    <div class="table-responsive">
+      <table mat-table [dataSource]="dataSource" class="users-table">
+        <!-- User ID -->
+        <ng-container matColumnDef="userId">
+          <th mat-header-cell *matHeaderCellDef>User ID</th>
+          <td mat-cell *matCellDef="let user">
+            <span class="user-handle-cell">&#64;{{ user.userId }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Display Name -->
+        <ng-container matColumnDef="displayName">
+          <th mat-header-cell *matHeaderCellDef>Display Name</th>
+          <td mat-cell *matCellDef="let user">
+            <span class="user-name-cell">{{ user.displayName }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Roles -->
+        <ng-container matColumnDef="roles">
+          <th mat-header-cell *matHeaderCellDef>Roles</th>
+          <td mat-cell *matCellDef="let user">
+            <span
+              class="badge"
+              [ngClass]="user.roles.includes('ROLE_ADMIN') || user.roles.includes('ADMIN') ? 'badge-info' : 'badge-neutral'">
+              {{ (user.roles.includes('ROLE_ADMIN') || user.roles.includes('ADMIN')) ? 'ADMIN' : 'USER' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Status -->
+        <ng-container matColumnDef="active">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let user">
+            <span class="badge" [ngClass]="user.active ? 'badge-success' : 'badge-danger'">
+              {{ user.active ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Level Progress -->
+        <ng-container matColumnDef="levelProgress">
+          <th mat-header-cell *matHeaderCellDef>Levels Progress</th>
+          <td mat-cell *matCellDef="let user">
+            <div class="level-badges-row">
+              <span class="lvl-badge" [ngClass]="'lvl-' + user.level1Status.toLowerCase()">
+                L1: {{ user.level1Status === 'COMPLETED' ? '✓' : (user.level1Status === 'IN_PROGRESS' ? '…' : '—') }}
+              </span>
+              <span class="lvl-badge" [ngClass]="'lvl-' + user.level2Status.toLowerCase()">
+                L2: {{ user.level2Status === 'COMPLETED' ? '✓' : (user.level2Status === 'IN_PROGRESS' ? '…' : '—') }}
+              </span>
+              <span class="lvl-badge" [ngClass]="'lvl-' + user.level3Status.toLowerCase()">
+                L3: {{ user.level3Status === 'COMPLETED' ? '✓' : (user.level3Status === 'IN_PROGRESS' ? '…' : '—') }}
+              </span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Created At -->
+        <ng-container matColumnDef="createdAt">
+          <th mat-header-cell *matHeaderCellDef>Joined</th>
+          <td mat-cell *matCellDef="let user">
+            <span class="text-muted">{{ user.createdAt | date: 'mediumDate' }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Actions -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let user" (click)="$event.stopPropagation()">
+            <div class="table-actions-cell">
+              <button
+                mat-icon-button
+                color="primary"
+                matTooltip="View Full Profile"
+                (click)="viewProfile(user.userId)">
+                <mat-icon>visibility</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                [color]="user.active ? 'warn' : 'accent'"
+                [matTooltip]="user.active ? 'Deactivate User' : 'Activate User'"
+                (click)="toggleUserStatus(user, $event)">
+                <mat-icon>{{ user.active ? 'block' : 'check_circle' }}</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          class="clickable-row"
+          (click)="viewProfile(row.userId)">
+        </tr>
+
+        <!-- No data row -->
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell empty-table" colspan="7">
+            No users found matching "{{ searchControl.value }}".
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Material Paginator -->
+    <mat-paginator
+      [length]="totalElements"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="[5, 10, 25, 50]"
+      (page)="onPageChange($event)"
+      showFirstLastButtons>
+    </mat-paginator>
+  </mat-card>
+</div>

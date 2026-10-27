@@ -1,0 +1,120 @@
+<div class="assessment-container">
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="isLoading">
+    <mat-spinner diameter="44"></mat-spinner>
+    <p>Loading assessment session...</p>
+  </div>
+
+  <div *ngIf="!isLoading && !isCompleted && currentQuestion" class="assessment-content">
+    <!-- Top Progress Bar -->
+    <div class="top-progress-wrapper">
+      <div class="progress-info">
+        <span class="level-tag">Level {{ level }}</span>
+        <span class="question-counter">Question {{ currentQuestionIndex }} of {{ totalQuestions }}</span>
+        <span class="percent-label">{{ progressPercentage }}%</span>
+      </div>
+      <mat-progress-bar mode="determinate" [value]="progressPercentage" class="assessment-progress"></mat-progress-bar>
+    </div>
+
+    <!-- Question Card -->
+    <mat-card class="question-card mindmap-card">
+      <div class="card-header-bar">
+        <span class="part-badge" *ngIf="currentPart">Part {{ currentPart }}</span>
+        <div class="flex-spacer"></div>
+
+        <!-- Timer if question has time limit -->
+        <div class="timer-badge" *ngIf="timeLimitSeconds > 0">
+          <mat-icon class="timer-icon">timer</mat-icon>
+          <span class="timer-text">{{ timeLeftSeconds }}s</span>
+          <mat-progress-spinner
+            mode="determinate"
+            [value]="timerPercentage"
+            diameter="24"
+            strokeWidth="3">
+          </mat-progress-spinner>
+        </div>
+      </div>
+
+      <!-- Content Warning Alert if present -->
+      <div class="alert alert-warn" *ngIf="showInlineWarning && currentQuestion.contentWarning">
+        <mat-icon>warning_amber</mat-icon>
+        <div class="warning-text">
+          <strong>Content Warning:</strong> {{ currentQuestion.contentWarning }}
+        </div>
+        <button mat-button color="accent" (click)="acknowledgeInlineWarning()">Acknowledge</button>
+      </div>
+
+      <!-- Scenario Block if present -->
+      <div class="scenario-block" *ngIf="currentQuestion.scenarioText">
+        <mat-icon class="quote-icon">format_quote</mat-icon>
+        <p class="scenario-text">{{ currentQuestion.scenarioText }}</p>
+      </div>
+
+      <!-- Question Text -->
+      <h2 class="question-title">{{ currentQuestion.text }}</h2>
+
+      <!-- Radio Group Options -->
+      <div class="options-wrapper">
+        <mat-radio-group [(ngModel)]="selectedOptionId" class="options-radio-group">
+          <mat-radio-button
+            *ngFor="let option of currentQuestion.options"
+            [value]="option.id"
+            class="option-radio-item"
+            [checked]="selectedOptionId === option.id">
+            <span class="option-text">{{ option.text }}</span>
+          </mat-radio-button>
+        </mat-radio-group>
+      </div>
+
+      <!-- Navigation & Actions Footer -->
+      <div class="question-actions">
+        <button
+          mat-stroked-button
+          color="warn"
+          type="button"
+          *ngIf="currentQuestion.isSkippable"
+          [disabled]="isSubmitting"
+          (click)="skipCurrentQuestion()">
+          <mat-icon>skip_next</mat-icon> Skip Question
+        </button>
+
+        <div class="flex-spacer"></div>
+
+        <button
+          mat-flat-button
+          color="primary"
+          type="button"
+          class="next-btn"
+          [disabled]="!selectedOptionId || isSubmitting"
+          (click)="submitCurrentAnswer()">
+          <mat-spinner *ngIf="isSubmitting" diameter="18" class="spinner-btn"></mat-spinner>
+          <span>{{ currentQuestionIndex === totalQuestions ? 'Submit Assessment' : 'Next Question' }}</span>
+          <mat-icon *ngIf="!isSubmitting">arrow_forward</mat-icon>
+        </button>
+      </div>
+    </mat-card>
+
+    <app-disclaimer-footer></app-disclaimer-footer>
+  </div>
+
+  <!-- Level Completed State -->
+  <div class="completed-state" *ngIf="!isLoading && isCompleted">
+    <mat-card class="completed-card mindmap-card">
+      <div class="completed-icon-badge">
+        <mat-icon>check_circle</mat-icon>
+      </div>
+      <h1 class="completed-title">Level {{ level }} Assessment Completed!</h1>
+      <p class="completed-desc">
+        Thank you for completing this level. Your responses have been processed and integrated into your psychological profile.
+      </p>
+
+      <div class="completed-actions">
+        <button mat-flat-button color="primary" (click)="returnToDashboard()">
+          <mat-icon>dashboard</mat-icon> Return to Dashboard
+        </button>
+      </div>
+    </mat-card>
+
+    <app-disclaimer-footer></app-disclaimer-footer>
+  </div>
+</div>
