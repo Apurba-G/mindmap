@@ -4,6 +4,7 @@ import com.mindmap.profiling.dto.FullProfileResponse;
 import com.mindmap.profiling.dto.LevelScoresResponse;
 import com.mindmap.profiling.dto.TemperamentResponse;
 import com.mindmap.profiling.entity.ProfileAccessAudit;
+import com.mindmap.profiling.entity.TemperamentType;
 import com.mindmap.profiling.security.JwtAuthenticationFilter;
 import com.mindmap.profiling.security.UserPrincipal;
 import com.mindmap.profiling.service.ProfileAccessService;
@@ -13,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.bean.MockBean;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,6 +33,7 @@ import java.util.UUID;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -81,12 +83,16 @@ class AdminProfileControllerTest {
             setUpAdminContext();
 
             FullProfileResponse response = new FullProfileResponse(
-                    TARGET_USER_ID, "john.doe",
-                    Map.of("openness", 72.0, "conscientiousness", 85.0, "extraversion", 45.0,
-                            "agreeableness", 68.0, "emotional_stability", 60.0),
-                    Map.of("ambiguity_tolerance", 65.0, "dark_theme_tolerance", 55.0, "moral_flexibility", 48.0),
-                    Map.of("strong_and_calm", 60.0, "moderate_temper", 30.0, "low_control_angry", 5.0, "low_control_confused", 5.0),
-                    0.87, Instant.now()
+                    TARGET_USER_ID,
+                    "john.doe",
+                    true,
+                    87.0,
+                    new LevelScoresResponse("LEVEL_1", Map.of()),
+                    new LevelScoresResponse("LEVEL_2", Map.of()),
+                    new LevelScoresResponse("LEVEL_3", Map.of()),
+                    null,
+                    List.of(),
+                    FullProfileResponse.ADMIN_DISCLAIMER
             );
 
             when(profileAccessService.getFullProfile(eq(TARGET_USER_ID), eq(ADMIN_ID), eq("admin.master"), anyString()))
@@ -94,9 +100,9 @@ class AdminProfileControllerTest {
 
             mockMvc.perform(get("/admin/users/{id}/full", TARGET_USER_ID))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.userId").value("john.doe"))
-                    .andExpect(jsonPath("$.level1Scores.openness").value(72.0))
-                    .andExpect(jsonPath("$.confidenceScore").value(0.87));
+                    .andExpect(jsonPath("$.userHandle").value("john.doe"))
+                    .andExpect(jsonPath("$.level1Scores.level").value("LEVEL_1"))
+                    .andExpect(jsonPath("$.overallConfidence").value(87.0));
         }
     }
 
@@ -113,12 +119,15 @@ class AdminProfileControllerTest {
             setUpAdminContext();
 
             TemperamentResponse response = new TemperamentResponse(
-                    TARGET_USER_ID,
-                    Map.of("strong_and_calm", 60.0, "moderate_temper", 30.0,
-                            "low_control_angry", 5.0, "low_control_confused", 5.0),
-                    "Strong and Calm",
+                    TemperamentType.STRONG_AND_CALM,
+                    Map.of(
+                            TemperamentType.STRONG_AND_CALM, 60.0,
+                            TemperamentType.MODERATE_TEMPER, 30.0,
+                            TemperamentType.LOW_CONTROL_ANGRY, 5.0,
+                            TemperamentType.LOW_CONTROL_CONFUSED, 5.0
+                    ),
                     "Demonstrates high emotional control with clear thinking under pressure.",
-                    0.92
+                    92.0
             );
 
             when(profileAccessService.getTemperament(eq(TARGET_USER_ID), eq(ADMIN_ID), eq("admin.master"), anyString()))
@@ -126,8 +135,8 @@ class AdminProfileControllerTest {
 
             mockMvc.perform(get("/admin/users/{id}/temperament", TARGET_USER_ID))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.primaryType").value("Strong and Calm"))
-                    .andExpect(jsonPath("$.percentages.strong_and_calm").value(60.0))
+                    .andExpect(jsonPath("$.primaryType").value("STRONG_AND_CALM"))
+                    .andExpect(jsonPath("$.breakdownPercentages.STRONG_AND_CALM").value(60.0))
                     .andExpect(jsonPath("$.explanation").isNotEmpty());
         }
     }
@@ -144,7 +153,7 @@ class AdminProfileControllerTest {
         void getAuditTrail_Returns200() throws Exception {
             setUpAdminContext();
 
-            when(profileAccessService.getAuditTrail(any(Pageable.class)))
+            when(profileAccessService.getAuditLogs(isNull(), isNull(), any(Pageable.class)))
                     .thenReturn(new PageImpl<>(Collections.emptyList()));
 
             mockMvc.perform(get("/admin/audit-trail"))

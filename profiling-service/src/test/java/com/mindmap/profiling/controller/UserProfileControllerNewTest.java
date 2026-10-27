@@ -3,6 +3,7 @@ package com.mindmap.profiling.controller;
 import com.mindmap.profiling.dto.CompletionStatusResponse;
 import com.mindmap.profiling.dto.ProfileExportDto;
 import com.mindmap.profiling.dto.UserProfileSummaryResponse;
+import com.mindmap.profiling.dto.SummaryItemDto;
 import com.mindmap.profiling.security.JwtAuthenticationFilter;
 import com.mindmap.profiling.security.UserPrincipal;
 import com.mindmap.profiling.service.ProfileAccessService;
@@ -13,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.bean.MockBean;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,6 +22,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -80,18 +82,22 @@ class UserProfileControllerNewTest {
             setUpUserContext();
 
             UserProfileSummaryResponse response = new UserProfileSummaryResponse(
-                    USER_ID,
-                    "You show a balanced personality with strong analytical thinking. " +
-                    "You tend to approach challenges thoughtfully and value clear communication.",
-                    Map.of("level1", true, "level2", true, "level3", false),
-                    "For self-awareness only, not a clinical diagnosis."
+                    true,
+                    "LEVEL_3",
+                    87.0,
+                    List.of(new SummaryItemDto(
+                            "LEVEL_1",
+                            "You show a balanced personality with strong analytical thinking.",
+                            "SHORT"
+                    )),
+                    UserProfileSummaryResponse.DEFAULT_DISCLAIMER
             );
 
             when(profileAccessService.getUserSummary(USER_ID)).thenReturn(response);
 
             mockMvc.perform(get("/me"))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.summary").isNotEmpty())
+                    .andExpect(jsonPath("$.summaries").isArray())
                     .andExpect(jsonPath("$.disclaimer").value("For self-awareness only, not a clinical diagnosis."));
         }
     }
@@ -110,17 +116,20 @@ class UserProfileControllerNewTest {
 
             CompletionStatusResponse response = new CompletionStatusResponse(
                     USER_ID,
-                    Map.of("LEVEL_1", true, "LEVEL_2", false, "LEVEL_3", false),
-                    "LEVEL_2"
+                    false,
+                    "LEVEL_2",
+                    80.0,
+                    List.of("LEVEL_1", "LEVEL_2"),
+                    Instant.now()
             );
 
             when(profileService.getCompletionStatus(USER_ID)).thenReturn(response);
 
             mockMvc.perform(get("/me/completion"))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.currentLevel").value("LEVEL_2"))
-                    .andExpect(jsonPath("$.completedLevels.LEVEL_1").value(true))
-                    .andExpect(jsonPath("$.completedLevels.LEVEL_2").value(false));
+                    .andExpect(jsonPath("$.highestLevel").value("LEVEL_2"))
+                    .andExpect(jsonPath("$.completedLevels[0]").value("LEVEL_1"))
+                    .andExpect(jsonPath("$.completedLevels[1]").value("LEVEL_2"));
         }
     }
 
@@ -137,10 +146,12 @@ class UserProfileControllerNewTest {
             setUpUserContext();
 
             ProfileExportDto export = new ProfileExportDto(
-                    USER_ID, "john.doe",
-                    Collections.emptyMap(),
-                    Collections.emptyMap(),
-                    Collections.emptyMap()
+                    UUID.randomUUID(),
+                    USER_ID,
+                    false,
+                    Instant.now(),
+                    Instant.now(),
+                    List.of()
             );
 
             when(profileService.exportUserProfile(USER_ID)).thenReturn(export);

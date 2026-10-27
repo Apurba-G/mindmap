@@ -5,6 +5,7 @@ import com.mindmap.profiling.dto.CreateScoringRuleRequest;
 import com.mindmap.profiling.dto.ScoringRuleDto;
 import com.mindmap.profiling.dto.UpdateScoringRuleRequest;
 import com.mindmap.profiling.entity.ProfileLevel;
+import com.mindmap.profiling.entity.RuleType;
 import com.mindmap.profiling.security.JwtAuthenticationFilter;
 import com.mindmap.profiling.service.ScoringRuleService;
 import org.junit.jupiter.api.DisplayName;
@@ -13,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.bean.MockBean;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -68,7 +69,7 @@ class ScoringRuleControllerTest {
         void listAllRules_AsAdmin_Returns200() throws Exception {
             ScoringRuleDto rule = new ScoringRuleDto(
                     RULE_ID, ProfileLevel.LEVEL_1, "openness", "Big Five Openness",
-                    "WEIGHTED_SUM", Map.of("weight", 1.0), true, 1
+                    RuleType.WEIGHT, Map.of("weight", 1.0), true, 1
             );
 
             when(scoringRuleService.getAllRules()).thenReturn(List.of(rule));
@@ -85,7 +86,7 @@ class ScoringRuleControllerTest {
         void listRulesByLevel_Returns200() throws Exception {
             ScoringRuleDto rule = new ScoringRuleDto(
                     RULE_ID, ProfileLevel.LEVEL_2, "ambiguity_tolerance", "Ambiguity Tolerance",
-                    "SCALED_AVERAGE", Map.of("scale", 100.0), true, 1
+                    RuleType.FORMULA, Map.of("scale", 100.0), true, 1
             );
 
             when(scoringRuleService.getRulesByLevel(ProfileLevel.LEVEL_2)).thenReturn(List.of(rule));
@@ -109,12 +110,12 @@ class ScoringRuleControllerTest {
         void createRule_Returns201() throws Exception {
             CreateScoringRuleRequest request = new CreateScoringRuleRequest(
                     ProfileLevel.LEVEL_1, "conscientiousness", "Big Five Conscientiousness",
-                    "WEIGHTED_SUM", Map.of("weight", 1.5), true
+                    RuleType.WEIGHT, Map.of("weight", 1.5), true
             );
 
             ScoringRuleDto created = new ScoringRuleDto(
                     UUID.randomUUID(), ProfileLevel.LEVEL_1, "conscientiousness",
-                    "Big Five Conscientiousness", "WEIGHTED_SUM", Map.of("weight", 1.5), true, 1
+                    "Big Five Conscientiousness", RuleType.WEIGHT, Map.of("weight", 1.5), true, 1
             );
 
             when(scoringRuleService.createRule(any(CreateScoringRuleRequest.class))).thenReturn(created);
@@ -144,7 +145,7 @@ class ScoringRuleControllerTest {
 
             ScoringRuleDto updated = new ScoringRuleDto(
                     RULE_ID, ProfileLevel.LEVEL_1, "openness", "Big Five Openness",
-                    "WEIGHTED_SUM", Map.of("weight", 2.0), false, 2
+                    RuleType.WEIGHT, Map.of("weight", 2.0), false, 2
             );
 
             when(scoringRuleService.updateRule(eq(RULE_ID), any(UpdateScoringRuleRequest.class)))
