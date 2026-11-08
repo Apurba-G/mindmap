@@ -6,14 +6,17 @@ export interface RegisterRequest {
   displayName: string;
   userId: string;
   password: string;
-  confirmPassword?: string;
+  passwordConfirm?: string;
 }
 
 export interface RegisterResponse {
+  id?: string;
   userId: string;
-  displayName: string;
+  displayName?: string;
   recoveryParagraph: string;
-  token?: string;
+  accessToken?: string;
+  tokenType?: string;
+  expiresIn?: number;
   message?: string;
 }
 
@@ -22,15 +25,22 @@ export interface LoginRequest {
   password: string;
 }
 
+
 export interface LoginResponse {
-  token: string;
-  userId: string;
-  displayName: string;
+  accessToken: string;
+  tokenType: string;
+  expiresIn: number;
   roles: string[];
   mustChangePassword: boolean;
+
+  // Optional
+  userId?: string;
+  displayName?: string;
+
   lockedUntil?: string;
   message?: string;
 }
+
 
 export interface UserInfo {
   userId: string;
@@ -57,9 +67,8 @@ export interface RecoveryInitiateResponse {
 }
 
 export interface PasswordResetRequest {
-  token: string;
   newPassword: string;
-  confirmPassword?: string;
+  newPasswordConfirm?: string;
 }
 
 export interface PasswordResetResponse {

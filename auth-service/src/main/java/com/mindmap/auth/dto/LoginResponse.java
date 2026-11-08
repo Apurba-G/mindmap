@@ -1,3 +1,4 @@
+
 package com.mindmap.auth.dto;
 
 import java.util.List;
@@ -9,6 +10,8 @@ public record LoginResponse(
     String accessToken,
     String tokenType,
     long expiresIn,
+    String userId,
+    String displayName,
     List<String> roles,
     boolean mustChangePassword
 ) {}

@@ -23,23 +23,36 @@ export class AuthService {
   /**
    * Log in user with credentials.
    */
+
+
   login(userId: string, password: string): Observable<LoginResponse> {
     const payload: LoginRequest = { userId, password };
-    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, payload).pipe(
-      tap((response: LoginResponse) => {
-        if (response.token) {
-          this.setToken(response.token);
-          const userInfo: UserInfo = {
-            userId: response.userId,
-            displayName: response.displayName,
-            roles: response.roles || [],
-            mustChangePassword: response.mustChangePassword
-          };
-          this.setCurrentUser(userInfo);
-        }
-      })
-    );
+
+    return this.http
+        .post<LoginResponse>(`${this.apiUrl}/login`, payload)
+        .pipe(
+            tap((response: LoginResponse) => {
+              if (!response.accessToken) {
+                throw new Error(
+                    'Login response does not contain an access token.'
+                );
+              }
+
+              this.setToken(response.accessToken);
+
+              const userInfo: UserInfo = {
+                userId: response.userId ?? '',
+                displayName: response.displayName ?? '',
+                roles: response.roles ?? [],
+                mustChangePassword: response.mustChangePassword
+              };
+
+              this.setCurrentUser(userInfo);
+            })
+        );
   }
+
+
 
   /**
    * Register a new user.
@@ -47,11 +60,11 @@ export class AuthService {
   register(request: RegisterRequest): Observable<RegisterResponse> {
     return this.http.post<RegisterResponse>(`${this.apiUrl}/register`, request).pipe(
       tap((response: RegisterResponse) => {
-        if (response.token) {
-          this.setToken(response.token);
+        if (response.accessToken) {
+          this.setToken(response.accessToken);
           const userInfo: UserInfo = {
             userId: response.userId,
-            displayName: response.displayName,
+            displayName: response.displayName || response.userId,
             roles: ['ROLE_USER'],
             mustChangePassword: false
           };

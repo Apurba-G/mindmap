@@ -7,7 +7,7 @@ import { UserIdAvailabilityResponse } from '../models/models';
   providedIn: 'root'
 })
 export class UserIdService {
-  private readonly apiUrl = '/api/users';
+  private readonly apiUrl = '/api/auth/userid';
 
   constructor(private http: HttpClient) {}
 
@@ -17,16 +17,17 @@ export class UserIdService {
    */
   checkAvailability(userId: string): Observable<UserIdAvailabilityResponse> {
     const params = new HttpParams().set('userId', userId.trim().toLowerCase());
-    return this.http.get<UserIdAvailabilityResponse>(`${this.apiUrl}/check-availability`, { params });
+    return this.http.get<UserIdAvailabilityResponse>(`${this.apiUrl}/check`, { params });
   }
 
   /**
    * Get handle/userId suggestions based on display name and optional interests.
    */
   getSuggestions(name: string, interests: string[] = []): Observable<string[]> {
-    return this.http.post<string[]>(`${this.apiUrl}/suggestions`, {
-      name,
-      interests
-    });
+    let params = new HttpParams().set('name', name);
+    if (interests.length > 0) {
+      interests.forEach(i => params = params.append('interests', i));
+    }
+    return this.http.get<string[]>(`${this.apiUrl}/suggestions`, { params });
   }
 }

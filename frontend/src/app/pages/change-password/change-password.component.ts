@@ -90,7 +90,7 @@ export class ChangePasswordComponent implements OnInit {
       newPassword
     };
 
-    this.http.post('/api/auth/change-password', payload).subscribe({
+    this.http.post('/api/auth/me/change-password', payload).subscribe({
       next: () => {
         this.isSubmitting = false;
         this.authService.setMustChangePassword(false);

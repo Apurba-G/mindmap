@@ -116,6 +116,8 @@ public class AuthenticationService {
                 accessToken,
                 "Bearer",
                 jwtService.getAccessTokenExpirationSeconds(),
+                user.getUserId(),
+                user.getDisplayName(),
                 roles,
                 user.isMustChangePassword()
         );

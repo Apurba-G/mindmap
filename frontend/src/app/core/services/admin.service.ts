@@ -7,7 +7,12 @@ import { AdminStats, AuditLogEntry, Page, SafetyFlag, ScoringRule, UserListItem 
   providedIn: 'root'
 })
 export class AdminService {
-  private readonly apiUrl = '/api/admin';
+  // Auth-service admin endpoints (users, audit logs)
+  private readonly authAdminUrl = '/api/auth/admin';
+  // Assessment-service admin endpoints (stats, safety flags)
+  private readonly assessmentAdminUrl = '/api/assessments/admin';
+  // Profiling-service admin endpoints (scoring rules)
+  private readonly profilingAdminUrl = '/api/profiles/admin';
 
   constructor(private http: HttpClient) {}
 
@@ -15,7 +20,7 @@ export class AdminService {
    * Get overall system metrics for the admin dashboard.
    */
   getStats(): Observable<AdminStats> {
-    return this.http.get<AdminStats>(`${this.apiUrl}/stats`);
+    return this.http.get<AdminStats>(`${this.assessmentAdminUrl}/stats`);
   }
 
   /**
@@ -28,28 +33,29 @@ export class AdminService {
     if (search.trim()) {
       params = params.set('search', search.trim());
     }
-    return this.http.get<Page<UserListItem>>(`${this.apiUrl}/users`, { params });
+    return this.http.get<Page<UserListItem>>(`${this.authAdminUrl}/users`, { params });
   }
 
   /**
    * Activate or deactivate a user account.
    */
   setUserActiveStatus(userId: string, active: boolean): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/users/${userId}/status`, { active });
+    const params = new HttpParams().set('active', active.toString());
+    return this.http.patch<void>(`${this.authAdminUrl}/users/${userId}/status`, null, { params });
   }
 
   /**
    * Get all scoring rules.
    */
   getScoringRules(): Observable<ScoringRule[]> {
-    return this.http.get<ScoringRule[]>(`${this.apiUrl}/scoring-rules`);
+    return this.http.get<ScoringRule[]>(`${this.profilingAdminUrl}/scoring-rules`);
   }
 
   /**
    * Update an existing scoring rule.
    */
   updateScoringRule(ruleId: string, rule: Partial<ScoringRule>): Observable<ScoringRule> {
-    return this.http.put<ScoringRule>(`${this.apiUrl}/scoring-rules/${ruleId}`, rule);
+    return this.http.put<ScoringRule>(`${this.profilingAdminUrl}/scoring-rules/${ruleId}`, rule);
   }
 
   /**
@@ -59,7 +65,7 @@ export class AdminService {
     const params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString());
-    return this.http.get<Page<AuditLogEntry>>(`${this.apiUrl}/audit-logs`, { params });
+    return this.http.get<Page<AuditLogEntry>>(`${this.authAdminUrl}/audit-logs`, { params });
   }
 
   /**
@@ -70,13 +76,13 @@ export class AdminService {
       .set('page', page.toString())
       .set('size', size.toString())
       .set('unreviewedOnly', unreviewedOnly.toString());
-    return this.http.get<Page<SafetyFlag>>(`${this.apiUrl}/safety-flags`, { params });
+    return this.http.get<Page<SafetyFlag>>(`${this.assessmentAdminUrl}/safety-flags`, { params });
   }
 
   /**
    * Mark a safety flag as reviewed.
    */
   reviewSafetyFlag(flagId: string): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/safety-flags/${flagId}/review`, {});
+    return this.http.post<void>(`${this.assessmentAdminUrl}/safety-flags/${flagId}/review`, {});
   }
 }

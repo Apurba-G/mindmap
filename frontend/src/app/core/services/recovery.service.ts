@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {
   PasswordResetRequest,
@@ -12,7 +12,7 @@ import {
   providedIn: 'root'
 })
 export class RecoveryService {
-  private readonly apiUrl = '/api/recovery';
+  private readonly apiUrl = '/api/auth/recovery';
 
   constructor(private http: HttpClient) {}
 
@@ -29,13 +29,14 @@ export class RecoveryService {
 
   /**
    * Reset password with the one-time recovery token.
+   * Token is passed via X-Recovery-Token header.
    */
   resetPassword(token: string, newPassword: string, confirm: string): Observable<PasswordResetResponse> {
     const payload: PasswordResetRequest = {
-      token,
       newPassword,
-      confirmPassword: confirm
+      newPasswordConfirm: confirm
     };
-    return this.http.post<PasswordResetResponse>(`${this.apiUrl}/reset-password`, payload);
+    const headers = new HttpHeaders().set('X-Recovery-Token', token);
+    return this.http.post<PasswordResetResponse>(`${this.apiUrl}/reset`, payload, { headers });
   }
 }

@@ -58,7 +58,7 @@ public class UserService {
      */
     @Transactional
     public void changePassword(UUID userId, ChangePasswordRequest request, String ipAddress) {
-        if (!request.newPassword().equals(request.newPasswordConfirm())) {
+        if (request.newPasswordConfirm() != null && !request.newPassword().equals(request.newPasswordConfirm())) {
             throw new WeakPasswordException("New password and confirmation do not match");
         }
 
@@ -66,17 +66,23 @@ public class UserService {
 
         User user = findUserOrThrow(userId);
 
-        if (!passwordEncoder.matches(request.currentPassword(), user.getPasswordHash())) {
-            auditService.log(
-                    user.getId(),
-                    user.getUserId(),
-                    "CHANGE_PASSWORD_FAILED",
-                    "USER",
-                    user.getId().toString(),
-                    Map.of("reason", "Current password mismatch"),
-                    ipAddress
-            );
-            throw new InvalidCredentialsException("Current password is incorrect");
+        // If user is NOT on forced first-login change, verify current password
+        if (!user.isMustChangePassword()) {
+            if (request.currentPassword() == null || request.currentPassword().isBlank()) {
+                throw new InvalidCredentialsException("Current password is required");
+            }
+            if (!passwordEncoder.matches(request.currentPassword(), user.getPasswordHash())) {
+                auditService.log(
+                        user.getId(),
+                        user.getUserId(),
+                        "CHANGE_PASSWORD_FAILED",
+                        "USER",
+                        user.getId().toString(),
+                        Map.of("reason", "Current password mismatch"),
+                        ipAddress
+                );
+                throw new InvalidCredentialsException("Current password is incorrect");
+            }
         }
 
         String newPasswordHash = passwordEncoder.encode(request.newPassword());
