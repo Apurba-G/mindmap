@@ -55,3 +55,8 @@ pgdata/
 
 # Redis dump
 dump.rdb
+# Backup files
+*.bak
+
+# Local debugging reports
+profiling-debug-report.txt
