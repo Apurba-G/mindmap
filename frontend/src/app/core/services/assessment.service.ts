@@ -69,6 +69,6 @@ export class AssessmentService {
    */
   acknowledgeWarning(level: number, part: string, accepted: boolean): Observable<void> {
     const payload: AcknowledgmentRequest = { level, part, accepted };
-    return this.http.post<void>(`${this.apiUrl}/warning-acknowledgment`, payload);
+    return this.http.post<void>(`${this.apiUrl}/content-warnings/LEVEL_${level}/${part}/ack`, payload);
   }
 }

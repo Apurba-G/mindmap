@@ -24,7 +24,7 @@ import java.util.UUID;
  */
 @Slf4j
 @RestController
-@RequestMapping("/sessions")
+@RequestMapping({"/sessions", "/api/assessments/sessions"})
 @RequiredArgsConstructor
 public class SessionController {
 

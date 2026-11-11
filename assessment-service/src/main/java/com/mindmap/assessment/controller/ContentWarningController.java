@@ -23,7 +23,7 @@ import java.util.UUID;
  */
 @Slf4j
 @RestController
-@RequestMapping("/content-warnings")
+@RequestMapping({"/content-warnings", "/api/assessments/content-warnings"})
 @RequiredArgsConstructor
 public class ContentWarningController {
 

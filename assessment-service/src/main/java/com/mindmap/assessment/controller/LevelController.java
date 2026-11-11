@@ -27,7 +27,7 @@ import java.util.UUID;
  */
 @Slf4j
 @RestController
-@RequestMapping("/levels")
+@RequestMapping({"/levels", "/api/assessments"})
 @RequiredArgsConstructor
 public class LevelController {
 

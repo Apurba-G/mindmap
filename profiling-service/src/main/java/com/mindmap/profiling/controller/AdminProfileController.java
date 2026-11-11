@@ -30,7 +30,7 @@ import java.util.UUID;
  */
 @Slf4j
 @RestController
-@RequestMapping({"/admin", "/api/v1/admin/profiles"})
+@RequestMapping({"/admin", "/api/v1/admin/profiles", "/api/profiles/admin"})
 @PreAuthorize("hasRole('ADMIN')")
 @RequiredArgsConstructor
 public class AdminProfileController {

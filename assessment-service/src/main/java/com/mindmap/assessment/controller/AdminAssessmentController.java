@@ -38,7 +38,7 @@ import java.util.UUID;
  */
 @Slf4j
 @RestController
-@RequestMapping("/admin")
+@RequestMapping({"/admin", "/api/assessments/admin"})
 @PreAuthorize("hasRole('ADMIN')")
 @RequiredArgsConstructor
 public class AdminAssessmentController {

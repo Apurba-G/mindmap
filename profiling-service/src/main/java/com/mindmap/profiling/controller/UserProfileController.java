@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
-@RequestMapping({"/me", "/api/v1/profiles/me"})
+@RequestMapping({"/me", "/api/v1/profiles/me", "/api/profiles/me"})
 @RequiredArgsConstructor
 public class UserProfileController {
 

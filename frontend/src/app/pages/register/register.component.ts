@@ -190,7 +190,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
       displayName: formVal.displayName.trim(),
       userId: formVal.userId.trim().toLowerCase(),
       password: formVal.password,
-      confirmPassword: formVal.confirmPassword
+      passwordConfirm: formVal.confirmPassword
     };
 
     this.authService.register(request).subscribe({
