@@ -150,7 +150,7 @@ class AuthControllerTest {
         @DisplayName("Should login successfully and return JWT token")
         void login_Success_Returns200() throws Exception {
             LoginRequest request = new LoginRequest("john.doe", "Str0ngP@ss!");
-            LoginResponse response = new LoginResponse("eyJ...", "Bearer", 3600, List.of("USER"), false);
+            LoginResponse response = new LoginResponse("eyJ...", "Bearer", 3600, "john.doe", "John Doe", List.of("USER"), false);
 
             when(authenticationService.login(any(LoginRequest.class), anyString())).thenReturn(response);
 
@@ -196,7 +196,7 @@ class AuthControllerTest {
         @DisplayName("Should return mustChangePassword=true for admin first login")
         void login_AdminFirstLogin_ReturnsMustChangePassword() throws Exception {
             LoginRequest request = new LoginRequest("admin.master", "Admin!InitialP@ss");
-            LoginResponse response = new LoginResponse("eyJ...", "Bearer", 3600, List.of("ADMIN"), true);
+            LoginResponse response = new LoginResponse("eyJ...", "Bearer", 3600, "admin.master", "Admin Master", List.of("ADMIN"), true);
 
             when(authenticationService.login(any(), anyString())).thenReturn(response);
 
